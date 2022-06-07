@@ -1,9 +1,10 @@
+import { DraggableBlock } from "./components/DraggableBlock";
+
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <div>Hello World</div>
-      </header>
+      <DraggableBlock type="PROCESS" />
+      <DraggableBlock type="RESOURCE" />
     </div>
   );
 }

@@ -1,0 +1,1 @@
+export type BlockType = 'PROCESS' | 'RESOURCE';
