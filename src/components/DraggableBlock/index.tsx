@@ -16,12 +16,11 @@ export const DraggableBlock = ({ type }: Props) => {
 
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const [position, setPosition] = useState<Position>({ top: "0px", left: "0px" });
+  const [position, setPosition] = useState<Position>({ top: "50px", left: "10px" });
 
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
 
   const dragMouseDown = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    console.log("passei aqui uhul")
 
     event.preventDefault();
     pos3 = event.clientX;

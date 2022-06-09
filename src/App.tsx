@@ -1,10 +1,9 @@
-import { DraggableBlock } from "./components/DraggableBlock";
+import { Homepage } from "./pages/Homepage";
 
 function App() {
   return (
     <div className="App">
-      <DraggableBlock type="PROCESS" />
-      <DraggableBlock type="RESOURCE" />
+      <Homepage />
     </div>
   );
 }
