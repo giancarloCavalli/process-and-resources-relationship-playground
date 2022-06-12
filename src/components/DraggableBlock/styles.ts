@@ -11,7 +11,7 @@ export const Wrapper = styled.div<Props>`
   position: absolute;
   width: 50px;
   height: 50px;
-  background-color: ${props => props.type === "PROCESS" ? "blue" : "red"};
+  background-color: ${props => props.type === "PROCESS" ? "blue" : "green"};
   border-radius: 20px;
   padding: 2px;
   display: flex;

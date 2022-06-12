@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { useState } from 'react';
+import { Block } from '../../types/block';
 import { BlockType } from '../../types/blockType';
 import * as S from './styles';
 
@@ -9,10 +10,11 @@ type Position = {
 }
 
 type Props = {
-  type: BlockType
+  block: Block;
+  dependsOnBlockId?: number
 }
 
-export const DraggableBlock = ({ type }: Props) => {
+export const DraggableBlock = ({ block, dependsOnBlockId }: Props) => {
 
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -55,13 +57,14 @@ export const DraggableBlock = ({ type }: Props) => {
 
   return (
     <S.Wrapper
+      id={block.id}
       onMouseDown={(event) => dragMouseDown(event)}
       ref={wrapperRef}
       left={position.left}
       top={position.top}
-      type={type}
+      type={block.type}
     >
-      <span>{type === 'PROCESS' ? "P" : "R"}</span>
+      <span>{block.type === 'PROCESS' ? "P" : "R"}{block.id}</span>
     </S.Wrapper>
   )
 }
