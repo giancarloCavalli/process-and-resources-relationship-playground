@@ -1,24 +1,17 @@
 import React, { useRef } from 'react';
-import { useState } from 'react';
 import { Block } from '../../types/block';
-import { BlockType } from '../../types/blockType';
+import { Position } from '../../types/position';
 import * as S from './styles';
-
-type Position = {
-  top: string,
-  left: string
-}
 
 type Props = {
   block: Block;
-  dependsOnBlockId?: number
+  position: Position;
+  onPositionChange: (block: Block, top: number, left: number) => void
 }
 
-export const DraggableBlock = ({ block, dependsOnBlockId }: Props) => {
+export const DraggableBlock = ({ block, position, onPositionChange }: Props) => {
 
   const wrapperRef = useRef<HTMLDivElement>(null);
-
-  const [position, setPosition] = useState<Position>({ top: "50px", left: "10px" });
 
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
 
@@ -43,10 +36,7 @@ export const DraggableBlock = ({ block, dependsOnBlockId }: Props) => {
     pos4 = event.clientY;
 
     // set the element's new position:
-    setPosition({
-      top: `${wrapperRef.current ? wrapperRef.current.offsetTop - pos2 : 0}px`,
-      left: `${wrapperRef.current ? wrapperRef.current.offsetLeft - pos1 : 0}px`
-    })
+    onPositionChange(block, wrapperRef.current ? wrapperRef.current.offsetTop - pos2 : 0, wrapperRef.current ? wrapperRef.current.offsetLeft - pos1 : 0)
   }
 
   const closeDragElement = () => {
@@ -60,8 +50,8 @@ export const DraggableBlock = ({ block, dependsOnBlockId }: Props) => {
       id={block.id}
       onMouseDown={(event) => dragMouseDown(event)}
       ref={wrapperRef}
-      left={position.left}
-      top={position.top}
+      left={`${position.left}px`}
+      top={`${position.top}px`}
       type={block.type}
     >
       <span>{block.type === 'PROCESS' ? "P" : "R"}{block.id}</span>
