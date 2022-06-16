@@ -18,7 +18,7 @@ type EditControl = {
   editingForBlock: Block | undefined;
 }
 
-type Connection = {
+type BlockConnection = {
   from: Block;
   to: Block;
 }
@@ -32,7 +32,7 @@ export const Homepage = () => {
     Object.keys(BlockTypeEnum).map(v => { return { type: v as BlockType, idCounter: 0 } })
   );
   const [editControl, setEditControl] = useState<EditControl>({ editingForBlock: undefined });
-  const [connections, setConnections] = useState<Connection[]>([]);
+  const [connections, setConnections] = useState<BlockConnection[]>([]);
 
   const getBlockId = (blockType: BlockType): string => {
     let control = blockControl.find(({ type }) => type === blockType);
@@ -99,7 +99,7 @@ export const Homepage = () => {
         ))}
         <ConnectionArrow connections={
           connections.map(({ from, to }) => {
-            return { positionFrom: getPosition(from, blocksPosition), positionTo: getPosition(to, blocksPosition) }
+            return { positionFrom: getPosition(from, blocksPosition), positionTo: getPosition(to, blocksPosition), lineSlackness: 0.3 }
           })
         } />
       </main>
