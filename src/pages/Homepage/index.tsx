@@ -5,18 +5,13 @@ import { GenerateBlockButton } from '../../components/GenerateBlockButton';
 import { BlockTypeEnum } from '../../enum/blockTypeEnum';
 import { Block, equals } from '../../types/block';
 import { BlockType } from '../../types/blockType';
-import { Position } from '../../types/position';
-import { isBlockWaitingSelection } from './helpers';
+import { getPosition, isBlockWaitingSelection } from './helpers';
 import { ConnectionArrow } from '../../components/ConnectionArrow';
+import { BlockPosition } from '../../types/blockPosition';
 
 type BlockControl = {
   idCounter: number;
   type: BlockType;
-}
-
-type BlockPosition = {
-  block: Block;
-  position: Position;
 }
 
 type EditControl = {
@@ -30,16 +25,13 @@ type Connection = {
 
 export const Homepage = () => {
 
+  // states
   const [blocksPosition, setBlocksPosition] = useState<BlockPosition[]>([]);
-
   const [blocks, setBlocks] = useState<Block[]>([]);
-
   const [blockControl, setBlockControl] = useState<BlockControl[]>(
     Object.keys(BlockTypeEnum).map(v => { return { type: v as BlockType, idCounter: 0 } })
   );
-
   const [editControl, setEditControl] = useState<EditControl>({ editingForBlock: undefined });
-
   const [connections, setConnections] = useState<Connection[]>([]);
 
   const getBlockId = (blockType: BlockType): string => {
@@ -80,16 +72,6 @@ export const Homepage = () => {
     }))
   }
 
-  const getPosition = (block: Block): Position => {
-    const blockPosition = blocksPosition.find(blockPos => (blockPos.block.id === block.id) && (blockPos.block.type === block.type));
-
-    if (blockPosition != null) {
-      return blockPosition.position;
-    }
-
-    return { top: 50, left: 10 };
-  }
-
   return (
     <>
       <S.Header>
@@ -101,7 +83,7 @@ export const Homepage = () => {
           <DraggableBlock
             isWaitingSelection={isBlockWaitingSelection(block, editControl.editingForBlock)}
             isInEditConnectionMode={equals(block, editControl.editingForBlock)}
-            position={getPosition(block)}
+            position={getPosition(block, blocksPosition)}
             onPositionChange={handlePositionChange}
             block={block}
             key={index}
@@ -112,7 +94,7 @@ export const Homepage = () => {
         ))}
         <ConnectionArrow connections={
           connections.map(({ from, to }) => {
-            return { positionFrom: getPosition(from), positionTo: getPosition(to) }
+            return { positionFrom: getPosition(from, blocksPosition), positionTo: getPosition(to, blocksPosition) }
           })
         } />
       </main>
