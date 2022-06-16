@@ -64,8 +64,8 @@ export const SmallButton = styled.button<ButtonProps>`
   }
 `
 
-export const Button = styled.button`
-  background-color: green;
+export const Button = styled.button<ButtonProps>`
+  background-color: ${props => props.backgroundColor};
   font-weight: 700;
   width: 25px;
   height: 25px;

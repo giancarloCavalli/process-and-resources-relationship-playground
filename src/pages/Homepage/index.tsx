@@ -3,9 +3,10 @@ import { useState } from 'react';
 import { DraggableBlock } from '../../components/DraggableBlock';
 import { GenerateBlockButton } from '../../components/GenerateBlockButton';
 import { BlockTypeEnum } from '../../enum/blockTypeEnum';
-import { Block } from '../../types/block';
+import { Block, equals } from '../../types/block';
 import { BlockType } from '../../types/blockType';
 import { Position } from '../../types/position';
+import { isBlockWaitingSelection } from './helpers';
 
 type BlockControl = {
   idCounter: number;
@@ -15,6 +16,10 @@ type BlockControl = {
 type BlockPosition = {
   block: Block;
   position: Position;
+}
+
+type EditControl = {
+  editingForBlock: Block | undefined;
 }
 
 export const Homepage = () => {
@@ -27,6 +32,8 @@ export const Homepage = () => {
     Object.keys(BlockTypeEnum).map(v => { return { type: v as BlockType, idCounter: 0 } })
   );
 
+  const [editControl, setEditControl] = useState<EditControl>({ editingForBlock: undefined })
+
   const getBlockId = (blockType: BlockType): string => {
     let control = blockControl.find(({ type }) => type === blockType);
 
@@ -34,6 +41,15 @@ export const Homepage = () => {
     setBlockControl(blockControl.map(value => { return value.type === blockType ? { ...value, idCounter: value.idCounter + 1 } : value }));
     return id;
   }
+
+  const handleBlockEditClick = (block: Block) => {
+    setEditControl({ editingForBlock: block });
+  }
+
+  const handleCancelBlockEditClick = () => {
+    setEditControl({ editingForBlock: undefined });
+  }
+
 
   const addBlock = (blockType: BlockType) => {
     const block: Block = { id: getBlockId(blockType), type: blockType };
@@ -70,7 +86,16 @@ export const Homepage = () => {
       </S.Header>
       <main>
         {blocks.map((block, index) => (
-          <DraggableBlock position={getPosition(block)} onPositionChange={handlePositionChange} block={block} key={index} />
+          <DraggableBlock
+            isWaitingSelection={isBlockWaitingSelection(block, editControl.editingForBlock)}
+            isInEditConnectionMode={equals(block, editControl.editingForBlock)}
+            position={getPosition(block)}
+            onPositionChange={handlePositionChange}
+            block={block}
+            key={index}
+            onEditButtonClick={handleBlockEditClick}
+            onCancelEditButtonClick={handleCancelBlockEditClick}
+          />
         ))}
       </main>
 

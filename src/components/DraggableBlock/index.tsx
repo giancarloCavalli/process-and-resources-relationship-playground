@@ -6,8 +6,11 @@ import { Position } from '../../types/position';
 type Props = {
   block: Block;
   position: Position;
+  isWaitingSelection: boolean;
+  isInEditConnectionMode: boolean;
   onPositionChange: (block: Block, top: number, left: number) => void
-  onAddConnectionButtonClick?: () => void
+  onEditButtonClick: (block: Block) => void
+  onCancelEditButtonClick: () => void
   onDropConnectionButtonClick?: () => void
   onConfirmConnectionButtonClick?: () => void
 }
@@ -15,14 +18,21 @@ type Props = {
 export const DraggableBlock = ({
   block,
   position,
+  isWaitingSelection,
+  isInEditConnectionMode,
   onPositionChange,
-  onAddConnectionButtonClick,
+  onEditButtonClick,
+  onCancelEditButtonClick,
   onDropConnectionButtonClick,
   onConfirmConnectionButtonClick
 }: Props) => {
 
-  const handleAddConnectionButtonClick = () => {
+  const handleEditButtonClick = () => {
+    onEditButtonClick(block)
+  }
 
+  const handleCancelEditButtonClick = () => {
+    onCancelEditButtonClick()
   }
 
   const handleDropConnectionButtonClick = () => {
@@ -80,12 +90,17 @@ export const DraggableBlock = ({
       </S.Block>
 
       <S.ButtonWrapper>
-        {false &&
-          <S.Button onClick={handleConfirmConnectionButtonClick}>+</S.Button>
+        {isWaitingSelection &&
+          <S.Button backgroundColor='green' onClick={handleConfirmConnectionButtonClick}>+</S.Button>
         }
-        {true &&
+
+        {isInEditConnectionMode &&
+          <S.Button backgroundColor='red' onClick={handleCancelEditButtonClick}>X</S.Button>
+        }
+
+        {!isWaitingSelection && !isInEditConnectionMode &&
           <>
-            <S.SmallButton backgroundColor='green' onClick={handleAddConnectionButtonClick}>+</S.SmallButton>
+            <S.SmallButton backgroundColor='green' onClick={handleEditButtonClick}>+</S.SmallButton>
             <S.SmallButton backgroundColor='red' onClick={handleDropConnectionButtonClick}>-</S.SmallButton>
           </>
         }
