@@ -99,7 +99,7 @@ export const Homepage = () => {
         ))}
         <ConnectionArrow connections={
           connections.map(({ from, to }) => {
-            return { positionFrom: getPosition(from, blocksPosition), positionTo: getPosition(to, blocksPosition), lineSlackness: 0.3 }
+            return { positionFrom: getPosition(from, blocksPosition), positionTo: getPosition(to, blocksPosition), lineSlackness: 0.2 }
           })
         } />
       </main>

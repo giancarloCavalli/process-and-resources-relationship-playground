@@ -21,7 +21,7 @@ export const Wrapper = styled.div<Props>`
   font-size: 30px;
   left: ${props => props.left};
   top: ${props => props.top};
-  `
+`
 
 export const Block = styled.div<BlockProps>`
   background-color: ${props => props.type === "PROCESS" ? "blue" : "green"};
