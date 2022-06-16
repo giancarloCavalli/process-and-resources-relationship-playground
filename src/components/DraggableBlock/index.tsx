@@ -12,7 +12,7 @@ type Props = {
   onEditButtonClick: (block: Block) => void
   onCancelEditButtonClick: () => void
   onDropConnectionButtonClick?: () => void
-  onConfirmConnectionButtonClick?: () => void
+  onConnectButtonClick: (block: Block) => void
 }
 
 export const DraggableBlock = ({
@@ -24,7 +24,7 @@ export const DraggableBlock = ({
   onEditButtonClick,
   onCancelEditButtonClick,
   onDropConnectionButtonClick,
-  onConfirmConnectionButtonClick
+  onConnectButtonClick
 }: Props) => {
 
   const handleEditButtonClick = () => {
@@ -36,11 +36,10 @@ export const DraggableBlock = ({
   }
 
   const handleDropConnectionButtonClick = () => {
-
   }
 
-  const handleConfirmConnectionButtonClick = () => {
-
+  const handleConnectButtonClick = () => {
+    onConnectButtonClick(block)
   }
 
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -91,7 +90,7 @@ export const DraggableBlock = ({
 
       <S.ButtonWrapper>
         {isWaitingSelection &&
-          <S.Button backgroundColor='green' onClick={handleConfirmConnectionButtonClick}>+</S.Button>
+          <S.Button backgroundColor='green' onClick={handleConnectButtonClick}>+</S.Button>
         }
 
         {isInEditConnectionMode &&

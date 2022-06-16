@@ -7,6 +7,7 @@ import { Block, equals } from '../../types/block';
 import { BlockType } from '../../types/blockType';
 import { Position } from '../../types/position';
 import { isBlockWaitingSelection } from './helpers';
+import { ConnectionArrow } from '../../components/ConnectionArrow';
 
 type BlockControl = {
   idCounter: number;
@@ -22,6 +23,11 @@ type EditControl = {
   editingForBlock: Block | undefined;
 }
 
+type Connection = {
+  from: Block;
+  to: Block;
+}
+
 export const Homepage = () => {
 
   const [blocksPosition, setBlocksPosition] = useState<BlockPosition[]>([]);
@@ -32,7 +38,9 @@ export const Homepage = () => {
     Object.keys(BlockTypeEnum).map(v => { return { type: v as BlockType, idCounter: 0 } })
   );
 
-  const [editControl, setEditControl] = useState<EditControl>({ editingForBlock: undefined })
+  const [editControl, setEditControl] = useState<EditControl>({ editingForBlock: undefined });
+
+  const [connections, setConnections] = useState<Connection[]>([]);
 
   const getBlockId = (blockType: BlockType): string => {
     let control = blockControl.find(({ type }) => type === blockType);
@@ -50,6 +58,10 @@ export const Homepage = () => {
     setEditControl({ editingForBlock: undefined });
   }
 
+  const handleConnectBlockClick = (block: Block) => {
+    setConnections([...connections, { from: editControl.editingForBlock as Block, to: block }])
+    setEditControl({ editingForBlock: undefined })
+  }
 
   const addBlock = (blockType: BlockType) => {
     const block: Block = { id: getBlockId(blockType), type: blockType };
@@ -95,8 +107,14 @@ export const Homepage = () => {
             key={index}
             onEditButtonClick={handleBlockEditClick}
             onCancelEditButtonClick={handleCancelBlockEditClick}
+            onConnectButtonClick={handleConnectBlockClick}
           />
         ))}
+        <ConnectionArrow connections={
+          connections.map(({ from, to }) => {
+            return { positionFrom: getPosition(from), positionTo: getPosition(to) }
+          })
+        } />
       </main>
 
       {/*<div style={{ height: "50px", left: "400px", width: "50px", top: "300px", backgroundColor: "blue", position: "absolute" }}></div>
