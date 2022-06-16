@@ -50,6 +50,10 @@ export const Homepage = () => {
     setEditControl({ editingForBlock: undefined });
   }
 
+  const handleDropConnectionClick = (block: Block) => {
+    setConnections(connections.filter(connection => !equals(connection.from, block)))
+  }
+
   const handleConnectBlockClick = (block: Block) => {
     setConnections([...connections, { from: editControl.editingForBlock as Block, to: block }])
     setEditControl({ editingForBlock: undefined })
@@ -89,6 +93,7 @@ export const Homepage = () => {
             key={index}
             onEditButtonClick={handleBlockEditClick}
             onCancelEditButtonClick={handleCancelBlockEditClick}
+            onDropConnectionButtonClick={handleDropConnectionClick}
             onConnectButtonClick={handleConnectBlockClick}
           />
         ))}
@@ -98,9 +103,6 @@ export const Homepage = () => {
           })
         } />
       </main>
-
-      {/*<div style={{ height: "50px", left: "400px", width: "50px", top: "300px", backgroundColor: "blue", position: "absolute" }}></div>
-      <div style={{ height: "50px", left: "600px", width: "50px", top: "500px", backgroundColor: "green", position: "absolute" }}></div>*/}
     </>
   )
 }

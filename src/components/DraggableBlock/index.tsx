@@ -11,7 +11,7 @@ type Props = {
   onPositionChange: (block: Block, top: number, left: number) => void
   onEditButtonClick: (block: Block) => void
   onCancelEditButtonClick: () => void
-  onDropConnectionButtonClick?: () => void
+  onDropConnectionButtonClick: (block: Block) => void
   onConnectButtonClick: (block: Block) => void
 }
 
@@ -36,6 +36,7 @@ export const DraggableBlock = ({
   }
 
   const handleDropConnectionButtonClick = () => {
+    onDropConnectionButtonClick(block)
   }
 
   const handleConnectButtonClick = () => {
