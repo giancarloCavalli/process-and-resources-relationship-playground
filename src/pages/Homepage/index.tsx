@@ -1,3 +1,4 @@
+import * as S from './style';
 import { useState } from 'react';
 import { DraggableBlock } from '../../components/DraggableBlock';
 import { GenerateBlockButton } from '../../components/GenerateBlockButton';
@@ -5,7 +6,6 @@ import { BlockTypeEnum } from '../../enum/blockTypeEnum';
 import { Block } from '../../types/block';
 import { BlockType } from '../../types/blockType';
 import { Position } from '../../types/position';
-import * as S from './style';
 
 type BlockControl = {
   idCounter: number;
@@ -74,8 +74,8 @@ export const Homepage = () => {
         ))}
       </main>
 
-      <div style={{ height: "50px", left: "400px", width: "50px", top: "300px", backgroundColor: "blue", position: "absolute" }}></div>
-      <div style={{ height: "50px", left: "600px", width: "50px", top: "500px", backgroundColor: "green", position: "absolute" }}></div>
+      {/*<div style={{ height: "50px", left: "400px", width: "50px", top: "300px", backgroundColor: "blue", position: "absolute" }}></div>
+      <div style={{ height: "50px", left: "600px", width: "50px", top: "500px", backgroundColor: "green", position: "absolute" }}></div>*/}
     </>
   )
 }

@@ -1,15 +1,37 @@
+import * as S from './styles';
 import React, { useRef } from 'react';
 import { Block } from '../../types/block';
 import { Position } from '../../types/position';
-import * as S from './styles';
 
 type Props = {
   block: Block;
   position: Position;
   onPositionChange: (block: Block, top: number, left: number) => void
+  onAddConnectionButtonClick?: () => void
+  onDropConnectionButtonClick?: () => void
+  onConfirmConnectionButtonClick?: () => void
 }
 
-export const DraggableBlock = ({ block, position, onPositionChange }: Props) => {
+export const DraggableBlock = ({
+  block,
+  position,
+  onPositionChange,
+  onAddConnectionButtonClick,
+  onDropConnectionButtonClick,
+  onConfirmConnectionButtonClick
+}: Props) => {
+
+  const handleAddConnectionButtonClick = () => {
+
+  }
+
+  const handleDropConnectionButtonClick = () => {
+
+  }
+
+  const handleConfirmConnectionButtonClick = () => {
+
+  }
 
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -52,9 +74,22 @@ export const DraggableBlock = ({ block, position, onPositionChange }: Props) => 
       ref={wrapperRef}
       left={`${position.left}px`}
       top={`${position.top}px`}
-      type={block.type}
     >
-      <span>{block.type === 'PROCESS' ? "P" : "R"}{block.id}</span>
+      <S.Block type={block.type}>
+        <span>{block.type === 'PROCESS' ? "P" : "R"}{block.id}</span>
+      </S.Block>
+
+      <S.ButtonWrapper>
+        {false &&
+          <S.Button onClick={handleConfirmConnectionButtonClick}>+</S.Button>
+        }
+        {true &&
+          <>
+            <S.SmallButton backgroundColor='green' onClick={handleAddConnectionButtonClick}>+</S.SmallButton>
+            <S.SmallButton backgroundColor='red' onClick={handleDropConnectionButtonClick}>-</S.SmallButton>
+          </>
+        }
+      </S.ButtonWrapper>
     </S.Wrapper>
   )
 }
