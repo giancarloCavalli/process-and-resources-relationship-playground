@@ -55,12 +55,26 @@ export const Homepage = () => {
   }
 
   const handleConnectBlockClick = (block: Block) => {
+    //TODO add repeated connection validation
+
     setConnections([...connections, { from: editControl.editingForBlock as Block, to: block }])
     setEditControl({ editingForBlock: undefined })
   }
 
+  const handleIncrementResourceQuantityClick = (block: Block) => {
+    const blockList = blocks.filter(blockFromList => !equals(blockFromList, block))
+
+    setBlocks([...blockList, block])
+  }
+
+  const handleDecrementResourceQuantityClick = (block: Block) => {
+    const blockList = blocks.filter(blockFromList => !equals(blockFromList, block))
+
+    setBlocks([...blockList, block])
+  }
+
   const addBlock = (blockType: BlockType) => {
-    const block: Block = { id: getBlockId(blockType), type: blockType };
+    const block: Block = { id: getBlockId(blockType), type: blockType, resourceQuantity: 1 };
 
     setBlocks([...blocks, block]);
 
@@ -95,6 +109,8 @@ export const Homepage = () => {
             onCancelEditButtonClick={handleCancelBlockEditClick}
             onDropConnectionButtonClick={handleDropConnectionClick}
             onConnectButtonClick={handleConnectBlockClick}
+            onIncrementResourceQuantityClick={handleIncrementResourceQuantityClick}
+            onDecrementResourceQuantityClick={handleDecrementResourceQuantityClick}
           />
         ))}
         <ConnectionArrow connections={

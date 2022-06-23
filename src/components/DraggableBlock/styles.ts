@@ -45,10 +45,22 @@ export const Block = styled.div<BlockProps>`
   }
 `
 
+export const ResourceCounterWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+`
+
+export const ResourceSphere = styled.div`
+  width: 12px;
+  height: 12px;
+  background-color: grey;
+  border-radius: 50px;
+  border-style: none;
+`
+
 export const ButtonWrapper = styled.div`
   display: flex;
   justify-content: space-around;
-  align-items: center;
 `
 
 export const SmallButton = styled.button<ButtonProps>`

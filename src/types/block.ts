@@ -3,6 +3,7 @@ import { BlockType } from "./blockType";
 export type Block = {
   id: string;
   type: BlockType;
+  resourceQuantity: number;
 }
 
 export const equals = (block1: Block | undefined, block2: Block | undefined): boolean => {
