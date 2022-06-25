@@ -4,10 +4,10 @@ export const getCurvedArrowPath = (fromPosition: Position, toPosition: Position,
   //https://www.beyondjava.net/how-to-connect-html-elements-with-an-arrow-using-svg
   //https://en.wikipedia.org/wiki/B%C3%A9zier_curve#Higher-order_curves
   const x1 = fromPosition.left + 30
-  const y1 = fromPosition.top - 50 + deviation
+  const y1 = fromPosition.top - 40 + deviation
 
   const x2 = toPosition.left + getConnectionAdjustmentInXAxis(x1, toPosition.left)
-  const y2 = toPosition.top - 50 + deviation
+  const y2 = toPosition.top - 40 + deviation
 
   const delta = (x2 - x1) * slackness
 
