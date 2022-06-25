@@ -21,6 +21,7 @@ type EditControl = {
 type BlockConnection = {
   from: Block;
   to: Block;
+  sequenceItHasBeenAddedBetweenEquals: number;
 }
 
 export const Homepage = () => {
@@ -33,6 +34,8 @@ export const Homepage = () => {
   );
   const [editControl, setEditControl] = useState<EditControl>({ editingForBlock: undefined });
   const [connections, setConnections] = useState<BlockConnection[]>([]);
+
+  const deviationBaseNumber = 8;
 
   const getBlockId = (blockType: BlockType): string => {
     let control = blockControl.find(({ type }) => type === blockType);
@@ -55,9 +58,9 @@ export const Homepage = () => {
   }
 
   const handleConnectBlockClick = (block: Block) => {
-    //TODO add repeated connection validation
+    const sequence = connections.filter(({ from, to }) => equals(from, editControl.editingForBlock) && equals(to, block)).length;
 
-    setConnections([...connections, { from: editControl.editingForBlock as Block, to: block }])
+    setConnections([...connections, { from: editControl.editingForBlock as Block, to: block, sequenceItHasBeenAddedBetweenEquals: sequence }])
     setEditControl({ editingForBlock: undefined })
   }
 
@@ -114,8 +117,13 @@ export const Homepage = () => {
           />
         ))}
         <ConnectionArrow connections={
-          connections.map(({ from, to }) => {
-            return { positionFrom: getPosition(from, blocksPosition), positionTo: getPosition(to, blocksPosition), lineSlackness: 0.2 }
+          connections.map(({ from, to, sequenceItHasBeenAddedBetweenEquals }) => {
+            return {
+              positionFrom: getPosition(from, blocksPosition),
+              positionTo: getPosition(to, blocksPosition),
+              lineSlackness: 0.2,
+              deviation: deviationBaseNumber * sequenceItHasBeenAddedBetweenEquals
+            }
           })
         } />
       </main>
