@@ -21,7 +21,7 @@ type EditControl = {
 type BlockConnection = {
   from: Block;
   to: Block;
-  sequenceItHasBeenAddedBetweenEquals: number;
+  sequenceItHasBeenAddedConsideringEquals: number;
 }
 
 export const Homepage = () => {
@@ -60,7 +60,7 @@ export const Homepage = () => {
   const handleConnectBlockClick = (block: Block) => {
     const sequence = connections.filter(({ from, to }) => equals(from, editControl.editingForBlock) && equals(to, block)).length;
 
-    setConnections([...connections, { from: editControl.editingForBlock as Block, to: block, sequenceItHasBeenAddedBetweenEquals: sequence }])
+    setConnections([...connections, { from: editControl.editingForBlock as Block, to: block, sequenceItHasBeenAddedConsideringEquals: sequence }])
     setEditControl({ editingForBlock: undefined })
   }
 
@@ -117,12 +117,12 @@ export const Homepage = () => {
           />
         ))}
         <ConnectionArrow connections={
-          connections.map(({ from, to, sequenceItHasBeenAddedBetweenEquals }) => {
+          connections.map(({ from, to, sequenceItHasBeenAddedConsideringEquals }) => {
             return {
               positionFrom: getPosition(from, blocksPosition),
               positionTo: getPosition(to, blocksPosition),
               lineSlackness: 0.2,
-              deviation: deviationBaseNumber * sequenceItHasBeenAddedBetweenEquals
+              deviation: deviationBaseNumber * sequenceItHasBeenAddedConsideringEquals
             }
           })
         } />
