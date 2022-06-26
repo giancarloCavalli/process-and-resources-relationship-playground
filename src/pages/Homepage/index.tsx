@@ -1,13 +1,13 @@
 import * as S from './style';
 import { useState } from 'react';
 import { DraggableBlock } from '../../components/DraggableBlock';
-import { GenerateBlockButton } from '../../components/GenerateBlockButton';
 import { BlockTypeEnum } from '../../enum/blockTypeEnum';
 import { Block, equals } from '../../types/block';
 import { BlockType } from '../../types/blockType';
 import { getPosition, isBlockWaitingSelection } from './helpers';
 import { ConnectionArrow } from '../../components/ConnectionArrow';
 import { BlockPosition } from '../../types/blockPosition';
+import { Button } from '../../components/Button';
 
 type BlockControl = {
   idCounter: number;
@@ -76,6 +76,14 @@ export const Homepage = () => {
     setBlocks([...blockList, block])
   }
 
+  const addResourceBlock = () => {
+    addBlock('RESOURCE');
+  }
+
+  const addProcessBlock = () => {
+    addBlock('PROCESS');
+  }
+
   const addBlock = (blockType: BlockType) => {
     const block: Block = { id: getBlockId(blockType), type: blockType, resourceQuantity: 1 };
 
@@ -96,8 +104,8 @@ export const Homepage = () => {
   return (
     <>
       <S.Header>
-        <GenerateBlockButton blockType='PROCESS' handleClick={addBlock} />
-        <GenerateBlockButton blockType='RESOURCE' handleClick={addBlock} />
+        <Button handleClick={addProcessBlock}>ADD PROCESS</Button>
+        <Button handleClick={addResourceBlock}>ADD RESOURCE</Button>
       </S.Header>
       <main>
         {blocks.map((block, index) => (

@@ -1,10 +1,14 @@
 import styled from "styled-components";
 
-export const Wrapper = styled.button`
+type Props = {
+  backgroundColor: string
+}
+
+export const Wrapper = styled.button<Props>`
   padding: 15px;
   border-radius: 20px;
   border: grey;
-  background-color: orange;
+  background-color: ${({ backgroundColor }) => backgroundColor};
   font-weight: bold;
   color: white;
 
