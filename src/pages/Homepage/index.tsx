@@ -4,10 +4,11 @@ import { DraggableBlock } from '../../components/DraggableBlock';
 import { BlockTypeEnum } from '../../enum/blockTypeEnum';
 import { Block, equals } from '../../types/block';
 import { BlockType } from '../../types/blockType';
-import { getPosition, isBlockWaitingSelection } from './helpers';
+import { buildDependenciesSolvingScenario, getPosition, isBlockWaitingSelection } from './helpers';
 import { ConnectionArrow } from '../../components/ConnectionArrow';
 import { BlockPosition } from '../../types/blockPosition';
 import { Button } from '../../components/Button';
+import { BlockConnection, DependencySolvingScenario } from './types';
 
 type BlockControl = {
   idCounter: number;
@@ -18,22 +19,18 @@ type EditControl = {
   editingForBlock: Block | undefined;
 }
 
-type BlockConnection = {
-  from: Block;
-  to: Block;
-  sequenceItHasBeenAddedConsideringEquals: number;
-}
-
 export const Homepage = () => {
 
   // states
-  const [blocksPosition, setBlocksPosition] = useState<BlockPosition[]>([]);
-  const [blocks, setBlocks] = useState<Block[]>([]);
+  const [blocksPosition, setBlocksPosition] = useState<BlockPosition[]>([])
+  const [blocks, setBlocks] = useState<Block[]>([])
   const [blockControl, setBlockControl] = useState<BlockControl[]>(
     Object.keys(BlockTypeEnum).map(v => { return { type: v as BlockType, idCounter: 0 } })
-  );
-  const [editControl, setEditControl] = useState<EditControl>({ editingForBlock: undefined });
-  const [connections, setConnections] = useState<BlockConnection[]>([]);
+  )
+  const [editControl, setEditControl] = useState<EditControl>({ editingForBlock: undefined })
+  const [connections, setConnections] = useState<BlockConnection[]>([])
+  const [solvingScenario, setSolvingScenario] = useState<DependencySolvingScenario[]>([])
+  const [solvingScene, setSolvingScene] = useState<number | undefined>(undefined)
 
   const deviationBaseNumber = 8;
 
@@ -101,13 +98,31 @@ export const Homepage = () => {
     }))
   }
 
+  const handleCheckDeadlock = () => {
+    const scenario: DependencySolvingScenario[] = buildDependenciesSolvingScenario(connections)
+    setSolvingScenario(scenario);
+
+    if (scenario.length === 0) window.alert("It results in deadlock")
+    else setSolvingScene(0);
+  }
+
+  const handleSelectScene = (sceneNumber: number) => {
+    setSolvingScene(sceneNumber)
+  }
+
   return (
     <>
       <S.Header>
         <Button handleClick={addProcessBlock}>ADD PROCESS</Button>
         <Button handleClick={addResourceBlock}>ADD RESOURCE</Button>
+        <Button handleClick={handleCheckDeadlock} backgroundColor='#00609C'>CHECK DEADLOCK</Button>
       </S.Header>
       <main>
+        <div>
+          {solvingScenario.map(({ sequence }) => (
+            <button key={sequence} onClick={() => handleSelectScene(sequence)}>{sequence + 1}</button>
+          ))}
+        </div>
         {blocks.map((block, index) => (
           <DraggableBlock
             isWaitingSelection={isBlockWaitingSelection(block, editControl.editingForBlock)}
@@ -125,14 +140,24 @@ export const Homepage = () => {
           />
         ))}
         <ConnectionArrow connections={
-          connections.map(({ from, to, sequenceItHasBeenAddedConsideringEquals }) => {
-            return {
-              positionFrom: getPosition(from, blocksPosition),
-              positionTo: getPosition(to, blocksPosition),
-              lineSlackness: 0.2,
-              deviation: deviationBaseNumber * sequenceItHasBeenAddedConsideringEquals
-            }
-          })
+          solvingScene === undefined ?
+            connections.map(({ from, to, sequenceItHasBeenAddedConsideringEquals }) => {
+              return {
+                positionFrom: getPosition(from, blocksPosition),
+                positionTo: getPosition(to, blocksPosition),
+                lineSlackness: 0.2,
+                deviation: deviationBaseNumber * sequenceItHasBeenAddedConsideringEquals
+              }
+            })
+            :
+            solvingScenario[solvingScene].blockConnections.map(({ from, to, sequenceItHasBeenAddedConsideringEquals }) => {
+              return {
+                positionFrom: getPosition(from, blocksPosition),
+                positionTo: getPosition(to, blocksPosition),
+                lineSlackness: 0.2,
+                deviation: deviationBaseNumber * sequenceItHasBeenAddedConsideringEquals
+              }
+            })
         } />
       </main>
     </>

@@ -10,7 +10,7 @@ type Props = {
 export const ConnectionArrow = ({ connections }: Props) => {
 
   return (
-    <Wrapper height="100vh" width="100%">
+    <Wrapper>
       {connections.map(({ positionFrom, positionTo, lineSlackness, deviation }, index) => (
         <React.Fragment key={index}>
           <defs>
