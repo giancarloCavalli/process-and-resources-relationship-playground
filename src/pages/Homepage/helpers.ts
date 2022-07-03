@@ -102,7 +102,7 @@ const removeConnectionsBetweenAndReturnUpdatedList = (process: Block, resource: 
   for (let i = 0; i < connections.length; i++) {
     const { from, to } = connections[i]
 
-    if (equals(from, process) && equals(to, resource) || equals(to, process) && equals(from, resource)) {
+    if ((equals(from, process) && equals(to, resource)) || (equals(to, process) && equals(from, resource))) {
       connections.splice(i, 1)
       i--
     }
