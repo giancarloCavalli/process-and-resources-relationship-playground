@@ -41,51 +41,67 @@ export const buildDependenciesSolvingScenario = (connections: BlockConnection[])
   let sequence = 0
   
   buildLists(connections)
+  console.log("ProcessNeedLists", processNeedLists)
+  console.log("ResourceDispositionLists", resourceDispositionLists)
 
-  let i = 0
-  dependencySolvingScenarios.push({sequence, blockConnections: connections.map(element => {return element})})
-  sequence++
-  while (connections.length > 0) {
+  return []
 
-    const connection = connections[i];
+  // let i = 0
+  // dependencySolvingScenarios.push({sequence, blockConnections: connections.map(element => {return element})})
+  // sequence++
+  // while (connections.length > 0) {
 
-    if (connection.from.type === "PROCESS") {
-      if (isAvailable(connection.to, connection.from)) {
-        connections.splice(i, 1)
-        dependencySolvingScenarios.push({sequence, blockConnections: connections.map(element => {return element})})
-        sequence++
-        i = 0
-      } else {
-        i++
-      }
-    }
-  }
+  //   const connection = connections[i];
 
-  console.log("SOLVING SCENARIO 1: ", dependencySolvingScenarios)
-  return dependencySolvingScenarios
+  //   if (connection.from.type === "PROCESS") {
+  //     if (isAvailable(connection.to, connection.from)) {
+  //       connections.splice(i, 1)
+  //       dependencySolvingScenarios.push({sequence, blockConnections: connections.map(element => {return element})})
+  //       sequence++
+  //       i = 0
+  //     } else {
+  //       i++
+  //     }
+  //   }
+  // }
+
+  // console.log("SOLVING SCENARIO 1: ", dependencySolvingScenarios)
+  // return dependencySolvingScenarios
 }
 
-const buildLists = (connections: BlockConnection[]) => {
-  connections.forEach(({from, to}) => {
+const buildLists = (blockConnections: BlockConnection[]) => {
+  processNeedLists.splice(0, processNeedLists.length);
+  resourceDispositionLists.splice(0, resourceDispositionLists.length);
+
+  blockConnections.forEach(({from, to}) => {
     
     if (from.type === "PROCESS") {
-      const processBlock = processNeedLists.find(({block}) => equals(block, from))
-
-      if (processBlock === undefined) {
-        processNeedLists.push({block: from, needs: [to]})
-      } else {
-        processBlock.needs.push(to);
-      }
+      addProcessToList(processNeedLists, from, to)
     } else if (from.type === "RESOURCE") {
-      const resourceBlock = resourceDispositionLists.find(({block}) => equals(block, from))
-
-      if (resourceBlock === undefined) {
-        resourceDispositionLists.push({block: from, isAvailableTo: [to]})
-      } else {
-        resourceBlock.isAvailableTo.push(to);
-      }
+      addResourceToList(resourceDispositionLists, from, to)
+      addProcessToList(processNeedLists, to, from)
     }
   })
+}
+
+const addProcessToList = (processNeedLists: ProcessNeedList[], processBlock: Block, resourceBlock: Block) => {
+  const processNeedList = processNeedLists.find(({block}) => equals(block, processBlock))
+
+  if (processNeedList === undefined) {
+    processNeedLists.push({block: processBlock, needs: [resourceBlock]})
+  } else {
+    processNeedList.needs.push(resourceBlock);
+  }
+}
+
+const addResourceToList = (resourceDispositionLists: ResourceDispositionList[], resourceBlock: Block, processBlock: Block) => {
+  const resourceDispositionList = resourceDispositionLists.find(({block}) => equals(block, resourceBlock))
+
+  if (resourceDispositionList === undefined) {
+    resourceDispositionLists.push({block: resourceBlock, isAvailableTo: [processBlock]})
+  } else {
+    resourceDispositionList.isAvailableTo.push(processBlock);
+  }
 }
 
 const isAvailable = (resourceBlockNeeded: Block, processBlock: Block): boolean => {

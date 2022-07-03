@@ -62,15 +62,25 @@ export const Homepage = () => {
   }
 
   const handleIncrementResourceQuantityClick = (block: Block) => {
-    const blockList = blocks.filter(blockFromList => !equals(blockFromList, block))
-
-    setBlocks([...blockList, block])
+    setBlocks(blocks.map((blockMap) => {
+      if (equals(blockMap, block)) {
+        blockMap.resourceQuantity = block.resourceQuantity
+        return blockMap
+      }
+      else
+        return blockMap
+    }))
   }
 
   const handleDecrementResourceQuantityClick = (block: Block) => {
-    const blockList = blocks.filter(blockFromList => !equals(blockFromList, block))
-
-    setBlocks([...blockList, block])
+    setBlocks(blocks.map((blockMap) => {
+      if (equals(blockMap, block)) {
+        blockMap.resourceQuantity = block.resourceQuantity
+        return blockMap
+      }
+      else
+        return blockMap
+    }))
   }
 
   const addResourceBlock = () => {
