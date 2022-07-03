@@ -13,6 +13,12 @@ Click here 👉 [Process and Resources Playground App](https://main--superlative
 
 ## To run it locally 👩‍💻👨‍💻
 
+### Dependencies
+- Node (v16.13.1 recommended)
+- Yarn
+
+### Commands
+
 In the project directory, to install the project dependencies first, run:
 ### `yarn`
 
