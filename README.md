@@ -1,5 +1,5 @@
 # Process and Resources Relationship Playground
-College assignment in which I had to design a solution where the user add Processes and Resources freely, establish their dependency relations and run a check to see if the system results in deadlock or not.
+College assignment in which I had to design a solution where the user adds Processes and Resources freely, establish their dependency relations and run a check to see if the system results in deadlock or not.
 
 ## Live demo ▶️
 Click here 👉 [Process and Resources Playground App](https://main--superlative-begonia-4c7862.netlify.app/) to see it running right away! 😎
