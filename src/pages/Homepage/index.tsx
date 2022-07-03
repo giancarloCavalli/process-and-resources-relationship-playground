@@ -44,6 +44,8 @@ export const Homepage = () => {
 
   const handleBlockEditClick = (block: Block) => {
     setEditControl({ editingForBlock: block });
+
+    if (solvingScene !== undefined) clearConnections()
   }
 
   const handleCancelBlockEditClick = () => {
@@ -52,6 +54,8 @@ export const Homepage = () => {
 
   const handleDropConnectionClick = (block: Block) => {
     setConnections(connections.filter(connection => !equals(connection.from, block)))
+
+    if (solvingScene !== undefined) clearConnections()
   }
 
   const handleConnectBlockClick = (block: Block) => {
@@ -121,6 +125,10 @@ export const Homepage = () => {
   }
 
   const handleClearConnections = () => {
+    clearConnections()
+  }
+
+  const clearConnections = () => {
     setConnections([])
     setSolvingScene(undefined)
     setSolvingScenario([])
