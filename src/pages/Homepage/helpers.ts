@@ -50,7 +50,7 @@ export const buildDependenciesSolvingScenario = (connections: BlockConnection[])
   while (notInDeadLock && copyConnections.length > 0) {
     const {from, to} = copyConnections[i];
 
-    if (from.type === "PROCESS") {
+    if (from.type === "PROCESS") { 
       const processNeedList = processNeedLists.find(({block}) => equals(block, from)) as ProcessNeedList
 
       if (isResourceAvailable(to, getQtResourceNeededForProcessBlock(to, processNeedList))) {
