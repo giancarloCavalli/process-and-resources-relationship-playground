@@ -62,6 +62,8 @@ export const buildDependenciesSolvingScenario = (connections: BlockConnection[])
         dependencySolvingScenarios = []
         notInDeadLock = false
       }
+    } else {
+      i++
     }
   }
 

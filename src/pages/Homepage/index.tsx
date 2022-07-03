@@ -159,7 +159,7 @@ export const Homepage = () => {
           {solvingScenario.map(({ sequence }) => (
             <button key={sequence} onClick={() => handleSelectScene(sequence)}>{sequence + 1}</button>
           ))}
-          {solvingScene !== undefined && <span style={{ marginLeft: "5px" }}>To start a new test with the same blocks, just start editing again 😊</span>}
+          {solvingScene !== undefined && <span style={{ marginLeft: "10px" }}>*To start a new test with the same blocks, just start editing again. 😊</span>}
         </div>
         {blocks.map((block, index) => (
           <DraggableBlock
