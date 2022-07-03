@@ -155,12 +155,19 @@ export const Homepage = () => {
         <Button handleClick={handleCheckDeadlock} backgroundColor='#00609C'>CHECK DEADLOCK</Button>
       </S.Header>
       <main>
-        <div>
+        <S.SceneButtonsWrapper>
+          {solvingScene !== undefined && <span style={{ marginLeft: "10px" }}>See each of the solution steps here 👉</span>}
           {solvingScenario.map(({ sequence }) => (
-            <button key={sequence} onClick={() => handleSelectScene(sequence)}>{sequence + 1}</button>
+            <S.SceneButton
+              key={sequence}
+              selected={solvingScene === sequence}
+              onClick={() => handleSelectScene(sequence)}
+            >
+              {sequence + 1}
+            </S.SceneButton>
           ))}
           {solvingScene !== undefined && <span style={{ marginLeft: "10px" }}>*To start a new test with the same blocks, just start editing again. 😊</span>}
-        </div>
+        </S.SceneButtonsWrapper>
         {blocks.map((block, index) => (
           <DraggableBlock
             isWaitingSelection={isBlockWaitingSelection(block, editControl.editingForBlock)}
