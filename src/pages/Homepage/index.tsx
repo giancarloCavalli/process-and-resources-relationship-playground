@@ -112,7 +112,7 @@ export const Homepage = () => {
     const scenario: DependencySolvingScenario[] = buildDependenciesSolvingScenario(connections)
     setSolvingScenario(scenario);
 
-    if (scenario.length === 0) window.alert("It results in deadlock")
+    if (scenario.length === 0) window.alert("The system will generate a deadlock error!")
     else setSolvingScene(0);
   }
 
@@ -120,11 +120,18 @@ export const Homepage = () => {
     setSolvingScene(sceneNumber)
   }
 
+  const handleClearConnections = () => {
+    setConnections([])
+    setSolvingScene(undefined)
+    setSolvingScenario([])
+  }
+
   return (
     <>
       <S.Header>
         <Button handleClick={addProcessBlock}>ADD PROCESS</Button>
         <Button handleClick={addResourceBlock}>ADD RESOURCE</Button>
+        <Button handleClick={handleClearConnections} backgroundColor='#BD1728'>CLEAR CONNECTIONS</Button>
         <Button handleClick={handleCheckDeadlock} backgroundColor='#00609C'>CHECK DEADLOCK</Button>
       </S.Header>
       <main>

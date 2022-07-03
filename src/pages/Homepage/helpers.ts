@@ -41,32 +41,55 @@ export const buildDependenciesSolvingScenario = (connections: BlockConnection[])
   let sequence = 0
   
   buildLists(connections)
-  console.log("ProcessNeedLists", processNeedLists)
-  console.log("ResourceDispositionLists", resourceDispositionLists)
 
-  return []
+  let i = 0
+  let notInDeadLock = true
+  dependencySolvingScenarios.push({sequence, blockConnections: connections.map(element => {return element})})
+  sequence++
+  let copyConnections = connections.map((connection) => {return connection})
+  while (notInDeadLock && copyConnections.length > 0) {
+    const {from, to} = copyConnections[i];
 
-  // let i = 0
-  // dependencySolvingScenarios.push({sequence, blockConnections: connections.map(element => {return element})})
-  // sequence++
-  // while (connections.length > 0) {
+    if (from.type === "PROCESS") {
+      const processNeedList = processNeedLists.find(({block}) => equals(block, from)) as ProcessNeedList
 
-  //   const connection = connections[i];
+      if (isResourceAvailable(to, getQtResourceNeededForProcessBlock(to, processNeedList))) {
+        copyConnections = removeConnectionsBetweenAndReturnUpdatedList(from, to, copyConnections)
+        dependencySolvingScenarios.push({sequence, blockConnections: copyConnections.map(element => {return element})})
+        sequence++
+        i = 0
+      } else {
+        dependencySolvingScenarios = []
+        notInDeadLock = false
+      }
+    }
+  }
 
-  //   if (connection.from.type === "PROCESS") {
-  //     if (isAvailable(connection.to, connection.from)) {
-  //       connections.splice(i, 1)
-  //       dependencySolvingScenarios.push({sequence, blockConnections: connections.map(element => {return element})})
-  //       sequence++
-  //       i = 0
-  //     } else {
-  //       i++
-  //     }
-  //   }
-  // }
+  return dependencySolvingScenarios
+}
 
-  // console.log("SOLVING SCENARIO 1: ", dependencySolvingScenarios)
-  // return dependencySolvingScenarios
+const getQtResourceNeededForProcessBlock = (resourceBlock: Block, processNeedList: ProcessNeedList): number => {
+  let counter = 0
+
+  processNeedList.needs.forEach((resourceBlockFE) => {
+    if (equals(resourceBlockFE, resourceBlock)) {
+      counter++
+    }
+  })
+
+  return counter
+}
+
+const removeConnectionsBetweenAndReturnUpdatedList = (process: Block, resource: Block, connections: BlockConnection[]): BlockConnection[] => {
+  for (let i = 0; i < connections.length; i++) {
+    const { from, to } = connections[i]
+
+    if (equals(from, process) && equals(to, resource) || equals(to, process) && equals(from, resource)) {
+      connections.splice(i, 1)
+      i--
+    }
+  }
+  return connections
 }
 
 const buildLists = (blockConnections: BlockConnection[]) => {
@@ -104,15 +127,8 @@ const addResourceToList = (resourceDispositionLists: ResourceDispositionList[], 
   }
 }
 
-const isAvailable = (resourceBlockNeeded: Block, processBlock: Block): boolean => {
-  const resourceDispositionList: ResourceDispositionList | undefined = resourceDispositionLists.find(({block}) => equals(block, resourceBlockNeeded))
-
-  if (resourceDispositionList === undefined) return true
-
-  if (resourceDispositionList.isAvailableTo.includes(processBlock)) {
-    console.log("passei aqui")
-    return true
-  }
+const isResourceAvailable = (resourceBlock: Block, qtResourceNeeded: number): boolean => {
+  if (resourceBlock.resourceQuantity >= qtResourceNeeded) return true
 
   return false
 }
