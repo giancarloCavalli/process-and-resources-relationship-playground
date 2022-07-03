@@ -51,10 +51,13 @@ export const buildDependenciesSolvingScenario = (connections: BlockConnection[])
     const {from, to} = copyConnections[i];
 
     if (from.type === "PROCESS") {
-      const processNeedList = processNeedLists.find(({block}) => equals(block, from)) as ProcessNeedList
 
-      if (isResourceAvailable(to, getQtResourceNeededForProcessBlock(to, processNeedList))) {
-        copyConnections = removeConnectionsBetweenAndReturnUpdatedList(from, to, copyConnections)
+      const process = from
+      const resource = to
+      const processNeedList = processNeedLists.find(({block}) => equals(block, process)) as ProcessNeedList
+
+      if (isResourceAvailable(resource, getQtResourceNeededForProcessBlock(resource, processNeedList))) {
+        copyConnections = removeConnectionsBetweenAndReturnUpdatedList(process, resource, copyConnections)
         dependencySolvingScenarios.push({sequence, blockConnections: copyConnections.map(element => {return element})})
         sequence++
         i = 0
@@ -62,8 +65,21 @@ export const buildDependenciesSolvingScenario = (connections: BlockConnection[])
         dependencySolvingScenarios = []
         notInDeadLock = false
       }
-    } else {
-      i++
+    } else if (from.type === "RESOURCE") {
+
+      const process = to
+      const resource = from
+      const processNeedList = processNeedLists.find(({block}) => equals(block, process)) as ProcessNeedList
+
+      if (isResourceAvailable(resource, getQtResourceNeededForProcessBlock(resource, processNeedList))) {
+        copyConnections = removeConnectionsBetweenAndReturnUpdatedList(process, resource, copyConnections)
+        dependencySolvingScenarios.push({sequence, blockConnections: copyConnections.map(element => {return element})})
+        sequence++
+        i = 0
+      } else {
+        dependencySolvingScenarios = []
+        notInDeadLock = false
+      }
     }
   }
 
