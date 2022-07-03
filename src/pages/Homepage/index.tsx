@@ -74,6 +74,8 @@ export const Homepage = () => {
       else
         return blockMap
     }))
+
+    if (solvingScene !== undefined) clearConnections()
   }
 
   const handleDecrementResourceQuantityClick = (block: Block) => {
@@ -85,6 +87,8 @@ export const Homepage = () => {
       else
         return blockMap
     }))
+
+    if (solvingScene !== undefined) clearConnections()
   }
 
   const addResourceBlock = () => {
@@ -124,8 +128,16 @@ export const Homepage = () => {
     setSolvingScene(sceneNumber)
   }
 
-  const handleClearConnections = () => {
+  const handleDeleteAll = () => {
     clearConnections()
+    deleteAll()
+  }
+
+  const deleteAll = () => {
+    setBlocksPosition([])
+    setBlocks([])
+    setBlockControl(Object.keys(BlockTypeEnum).map(v => { return { type: v as BlockType, idCounter: 0 } }))
+    setEditControl({ editingForBlock: undefined })
   }
 
   const clearConnections = () => {
@@ -139,7 +151,7 @@ export const Homepage = () => {
       <S.Header>
         <Button handleClick={addProcessBlock}>ADD PROCESS</Button>
         <Button handleClick={addResourceBlock}>ADD RESOURCE</Button>
-        <Button handleClick={handleClearConnections} backgroundColor='#BD1728'>CLEAR CONNECTIONS</Button>
+        <Button handleClick={handleDeleteAll} backgroundColor='#BD1728'>DELETE ALL</Button>
         <Button handleClick={handleCheckDeadlock} backgroundColor='#00609C'>CHECK DEADLOCK</Button>
       </S.Header>
       <main>
@@ -147,6 +159,7 @@ export const Homepage = () => {
           {solvingScenario.map(({ sequence }) => (
             <button key={sequence} onClick={() => handleSelectScene(sequence)}>{sequence + 1}</button>
           ))}
+          {solvingScene !== undefined && <span style={{ marginLeft: "5px" }}>To start a new test with the same blocks, just start editing again 😊</span>}
         </div>
         {blocks.map((block, index) => (
           <DraggableBlock
