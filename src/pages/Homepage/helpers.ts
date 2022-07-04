@@ -1,4 +1,3 @@
-import { equal } from "assert";
 import { Block, equals } from "../../types/block";
 import { BlockPosition } from "../../types/blockPosition";
 import { Position } from "../../types/position";
