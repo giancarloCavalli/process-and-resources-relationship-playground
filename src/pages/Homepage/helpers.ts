@@ -1,3 +1,4 @@
+import { equal } from "assert";
 import { Block, equals } from "../../types/block";
 import { BlockPosition } from "../../types/blockPosition";
 import { Position } from "../../types/position";
@@ -39,16 +40,17 @@ export const getPosition = (block: Block, blocksPosition: BlockPosition[]): Posi
 export const buildDependenciesSolvingScenario = (connections: BlockConnection[]): DependencySolvingScenario[] => {
   let dependencySolvingScenarios: DependencySolvingScenario[] = []
   let sequence = 0
-  
   buildLists(connections)
+  
   // console.log("processNeedLists", processNeedLists)
   // console.log("resourceDispositionLists", resourceDispositionLists)
-
+  
   let i = 0
   let notInDeadLock = true
   dependencySolvingScenarios.push({sequence, blockConnections: connections.map(element => {return element})})
   sequence++
   let copyConnections = connections.map((connection) => {return connection})
+  
   while (notInDeadLock && copyConnections.length > 0) {
     const {from, to} = copyConnections[i];
 
@@ -117,6 +119,9 @@ const removeConnectionsBetweenAndReturnUpdatedList = (process: Block, resource: 
       i--
     }
   }
+
+  buildLists(connections)
+
   return connections
 }
 
@@ -156,9 +161,11 @@ const addResourceToList = (resourceDispositionLists: ResourceDispositionList[], 
 }
 
 const isResourceAvailable = (resource: Block, process: Block, qtResourceNeeded: number): boolean => {
-
   const availableQuantity = resource.resourceQuantity - getQtAllocatedToOtherProcesses(resource, process)
-
+  
+  // console.log("process", process)
+  // console.log("resource", resource)
+  // console.log("availableQuantity", availableQuantity)
   if (availableQuantity >= qtResourceNeeded) return true
 
   return false
