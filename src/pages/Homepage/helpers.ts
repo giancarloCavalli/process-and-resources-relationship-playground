@@ -41,8 +41,8 @@ export const buildDependenciesSolvingScenario = (connections: BlockConnection[])
   let sequence = 0
   
   buildLists(connections)
-  console.log("processNeedLists", processNeedLists)
-  console.log("resourceDispositionLists", resourceDispositionLists)
+  // console.log("processNeedLists", processNeedLists)
+  // console.log("resourceDispositionLists", resourceDispositionLists)
 
   let i = 0
   let notInDeadLock = true
@@ -53,19 +53,23 @@ export const buildDependenciesSolvingScenario = (connections: BlockConnection[])
     const {from, to} = copyConnections[i];
 
     if (from.type === "PROCESS") {
-
+      
       const process = from
       const resource = to
       const processNeedList = processNeedLists.find(({block}) => equals(block, process)) as ProcessNeedList
-
+      
       if (isResourceAvailable(resource, process, getQtResourceNeededForProcessBlock(resource, processNeedList))) {
         copyConnections = removeConnectionsBetweenAndReturnUpdatedList(process, resource, copyConnections)
         dependencySolvingScenarios.push({sequence, blockConnections: copyConnections.map(element => {return element})})
         sequence++
         i = 0
       } else {
-        dependencySolvingScenarios = []
-        notInDeadLock = false
+        if (i === copyConnections.length - 1) {
+          dependencySolvingScenarios = []
+          notInDeadLock = false
+        } else {
+          i++
+        }
       }
     } else if (from.type === "RESOURCE") {
 
@@ -79,8 +83,12 @@ export const buildDependenciesSolvingScenario = (connections: BlockConnection[])
         sequence++
         i = 0
       } else {
-        dependencySolvingScenarios = []
-        notInDeadLock = false
+        if (i === copyConnections.length - 1) {
+          dependencySolvingScenarios = []
+          notInDeadLock = false
+        } else {
+          i++
+        }
       }
     }
   }
