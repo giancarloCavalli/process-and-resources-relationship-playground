@@ -41,6 +41,8 @@ export const buildDependenciesSolvingScenario = (connections: BlockConnection[])
   let sequence = 0
   
   buildLists(connections)
+  console.log("processNeedLists", processNeedLists)
+  console.log("resourceDispositionLists", resourceDispositionLists)
 
   let i = 0
   let notInDeadLock = true
@@ -56,7 +58,7 @@ export const buildDependenciesSolvingScenario = (connections: BlockConnection[])
       const resource = to
       const processNeedList = processNeedLists.find(({block}) => equals(block, process)) as ProcessNeedList
 
-      if (isResourceAvailable(resource, getQtResourceNeededForProcessBlock(resource, processNeedList))) {
+      if (isResourceAvailable(resource, process, getQtResourceNeededForProcessBlock(resource, processNeedList))) {
         copyConnections = removeConnectionsBetweenAndReturnUpdatedList(process, resource, copyConnections)
         dependencySolvingScenarios.push({sequence, blockConnections: copyConnections.map(element => {return element})})
         sequence++
@@ -71,7 +73,7 @@ export const buildDependenciesSolvingScenario = (connections: BlockConnection[])
       const resource = from
       const processNeedList = processNeedLists.find(({block}) => equals(block, process)) as ProcessNeedList
 
-      if (isResourceAvailable(resource, getQtResourceNeededForProcessBlock(resource, processNeedList))) {
+      if (isResourceAvailable(resource, process, getQtResourceNeededForProcessBlock(resource, processNeedList))) {
         copyConnections = removeConnectionsBetweenAndReturnUpdatedList(process, resource, copyConnections)
         dependencySolvingScenarios.push({sequence, blockConnections: copyConnections.map(element => {return element})})
         sequence++
@@ -145,8 +147,21 @@ const addResourceToList = (resourceDispositionLists: ResourceDispositionList[], 
   }
 }
 
-const isResourceAvailable = (resourceBlock: Block, qtResourceNeeded: number): boolean => {
-  if (resourceBlock.resourceQuantity >= qtResourceNeeded) return true
+const isResourceAvailable = (resource: Block, process: Block, qtResourceNeeded: number): boolean => {
+
+  const availableQuantity = resource.resourceQuantity - getQtAllocatedToOtherProcesses(resource, process)
+
+  if (availableQuantity >= qtResourceNeeded) return true
 
   return false
+}
+
+const getQtAllocatedToOtherProcesses = (resource: Block, process: Block) => {
+  const disposition = resourceDispositionLists.find(({block}) => equals(block, resource))
+
+  if (disposition === undefined) return 0
+
+  const qtAllocatedToOtherProcesses = disposition.isAvailableTo.filter((block) => !equals(block, process)).length
+
+  return qtAllocatedToOtherProcesses
 }
