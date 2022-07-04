@@ -106,6 +106,7 @@ const getQtResourceNeededForProcessBlock = (resourceBlock: Block, processNeedLis
 }
 
 const removeConnectionsBetweenAndReturnUpdatedList = (process: Block, resource: Block, connections: BlockConnection[]): BlockConnection[] => {
+  //TODO need to remove connections to all the resources attached to the the process, not just one
   for (let i = 0; i < connections.length; i++) {
     const { from, to } = connections[i]
 
