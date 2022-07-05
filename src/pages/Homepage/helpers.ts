@@ -47,44 +47,22 @@ export const buildDependenciesSolvingScenario = (connections: BlockConnection[])
   sequence++
   let copyConnections = connections.map((connection) => {return connection})
   
-  while (notInDeadLock && copyConnections.length > 0) {
-    const {from, to} = copyConnections[i];
-
-    if (from.type === "PROCESS") {
-      
-      const process = from
-      const resource = to
-      
-      if (areAllResourcesAvailable(process)) {
-        copyConnections = removeConnectionsBetweenAndReturnUpdatedList(process, resource, copyConnections)
-        dependencySolvingScenarios.push({sequence, blockConnections: copyConnections.map(element => {return element})})
-        sequence++
-        i = 0
+  while (notInDeadLock && processNeedLists.length > 0) {
+    
+    const {block:process} = processNeedLists[i]
+    
+    if (areAllResourcesAvailable(process)) {
+      copyConnections = removeConnectionsAndReturnUpdatedList(process, copyConnections)
+      dependencySolvingScenarios.push({sequence, blockConnections: copyConnections.map(element => {return element})})
+      sequence++
+      i = 0
+    } else {
+      const verificationHasReachedTheEnd = (i === processNeedLists.length - 1)
+      if (verificationHasReachedTheEnd) {
+        dependencySolvingScenarios = []
+        notInDeadLock = false
       } else {
-        if (i === copyConnections.length - 1) {
-          dependencySolvingScenarios = []
-          notInDeadLock = false
-        } else {
-          i++
-        }
-      }
-    } else if (from.type === "RESOURCE") {
-
-      const process = to
-      const resource = from
-
-      if (areAllResourcesAvailable(process)) {
-        copyConnections = removeConnectionsBetweenAndReturnUpdatedList(process, resource, copyConnections)
-        dependencySolvingScenarios.push({sequence, blockConnections: copyConnections.map(element => {return element})})
-        sequence++
-        i = 0
-      } else {
-        if (i === copyConnections.length - 1) {
-          dependencySolvingScenarios = []
-          notInDeadLock = false
-        } else {
-          i++
-        }
+        i++
       }
     }
   }
@@ -104,16 +82,20 @@ const getQtResourceNeededForProcessBlock = (resourceBlock: Block, processNeedLis
   return counter
 }
 
-const removeConnectionsBetweenAndReturnUpdatedList = (process: Block, resource: Block, connections: BlockConnection[]): BlockConnection[] => {
-  //TODO need to remove connections to all the resources attached to the the process, not just one
+const removeConnectionsAndReturnUpdatedList = (process: Block, connections: BlockConnection[]): BlockConnection[] => {
+  console.log("connectionsAntes", connections)
+  
   for (let i = 0; i < connections.length; i++) {
+  
     const { from, to } = connections[i]
+    const processInConnections = from.type === "PROCESS" ? from : to
 
-    if ((equals(from, process) && equals(to, resource)) || (equals(to, process) && equals(from, resource))) {
+    if (equals(process, processInConnections)) {
       connections.splice(i, 1)
       i--
     }
   }
+  console.log("connectionsDepois", connections)
 
   buildLists(connections)
 
