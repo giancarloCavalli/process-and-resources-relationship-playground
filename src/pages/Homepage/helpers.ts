@@ -83,8 +83,6 @@ const getQtResourceNeededForProcessBlock = (resourceBlock: Block, processNeedLis
 }
 
 const removeConnectionsAndReturnUpdatedList = (process: Block, connections: BlockConnection[]): BlockConnection[] => {
-  console.log("connectionsAntes", connections)
-  
   for (let i = 0; i < connections.length; i++) {
   
     const { from, to } = connections[i]
@@ -95,7 +93,6 @@ const removeConnectionsAndReturnUpdatedList = (process: Block, connections: Bloc
       i--
     }
   }
-  console.log("connectionsDepois", connections)
 
   buildLists(connections)
 
