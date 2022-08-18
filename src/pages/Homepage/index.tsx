@@ -1,14 +1,15 @@
 import * as S from './style';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { DraggableBlock } from '../../components/DraggableBlock';
 import { BlockTypeEnum } from '../../enum/blockTypeEnum';
-import { Block, equals } from '../../types/block';
+import { Block, BlockContextType, equals } from '../../types/block';
 import { BlockType } from '../../types/blockType';
 import { buildDependenciesSolvingScenario, getPosition, isBlockWaitingSelection } from './helpers';
 import { ConnectionArrow } from '../../components/ConnectionArrow';
 import { BlockPosition } from '../../types/blockPosition';
 import { Button } from '../../components/Button';
 import { BlockConnection, DependencySolvingScenario } from './types';
+import { BlockContext } from '../../context/blockContext';
 
 type BlockControl = {
   idCounter: number;
@@ -20,7 +21,6 @@ type EditControl = {
 }
 
 export const Homepage = () => {
-
   // states
   const [blocksPosition, setBlocksPosition] = useState<BlockPosition[]>([])
   const [blocks, setBlocks] = useState<Block[]>([])
@@ -31,6 +31,8 @@ export const Homepage = () => {
   const [connections, setConnections] = useState<BlockConnection[]>([])
   const [solvingScenario, setSolvingScenario] = useState<DependencySolvingScenario[]>([])
   const [solvingScene, setSolvingScene] = useState<number | undefined>(undefined)
+
+  const { blocks: blocksFromContext, saveBlock } = useContext(BlockContext) as BlockContextType
 
   const deviationBaseNumber = 8;
 
