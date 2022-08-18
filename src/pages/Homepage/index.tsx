@@ -23,7 +23,7 @@ type EditControl = {
 export const Homepage = () => {
   // states
   const [blocksPosition, setBlocksPosition] = useState<BlockPosition[]>([])
-  const [blocks, setBlocks] = useState<Block[]>([])
+  // const [blocks, setBlocks] = useState<Block[]>([])
   const [blockControl, setBlockControl] = useState<BlockControl[]>(
     Object.keys(BlockTypeEnum).map(v => { return { type: v as BlockType, idCounter: 0 } })
   )
@@ -32,7 +32,7 @@ export const Homepage = () => {
   const [solvingScenario, setSolvingScenario] = useState<DependencySolvingScenario[]>([])
   const [solvingScene, setSolvingScene] = useState<number | undefined>(undefined)
 
-  const { blocks: blocksFromContext, saveBlock } = useContext(BlockContext) as BlockContextType
+  const { blocks, saveBlock, updateBlock, deleteAll } = useContext(BlockContext) as BlockContextType
 
   const deviationBaseNumber = 8;
 
@@ -68,27 +68,13 @@ export const Homepage = () => {
   }
 
   const handleIncrementResourceQuantityClick = (block: Block) => {
-    setBlocks(blocks.map((blockMap) => {
-      if (equals(blockMap, block)) {
-        blockMap.resourceQuantity = block.resourceQuantity
-        return blockMap
-      }
-      else
-        return blockMap
-    }))
+    updateBlock(block)
 
     if (solvingScene !== undefined) clearConnections()
   }
 
   const handleDecrementResourceQuantityClick = (block: Block) => {
-    setBlocks(blocks.map((blockMap) => {
-      if (equals(blockMap, block)) {
-        blockMap.resourceQuantity = block.resourceQuantity
-        return blockMap
-      }
-      else
-        return blockMap
-    }))
+    updateBlock(block)
 
     if (solvingScene !== undefined) clearConnections()
   }
@@ -104,7 +90,7 @@ export const Homepage = () => {
   const addBlock = (blockType: BlockType) => {
     const block: Block = { id: getBlockId(blockType), type: blockType, resourceQuantity: 1 };
 
-    setBlocks([...blocks, block]);
+    saveBlock(block)
 
     setBlocksPosition([...blocksPosition, { block, position: { top: 50, left: 10 } }])
   }
@@ -132,12 +118,12 @@ export const Homepage = () => {
 
   const handleDeleteAll = () => {
     clearConnections()
-    deleteAll()
+    clearAll()
   }
 
-  const deleteAll = () => {
+  const clearAll = () => {
     setBlocksPosition([])
-    setBlocks([])
+    deleteAll()
     setBlockControl(Object.keys(BlockTypeEnum).map(v => { return { type: v as BlockType, idCounter: 0 } }))
     setEditControl({ editingForBlock: undefined })
   }

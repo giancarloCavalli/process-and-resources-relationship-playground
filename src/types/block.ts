@@ -9,6 +9,8 @@ export type Block = {
 export type BlockContextType = {
   blocks: Block[];
   saveBlock: (block: Block) => void;
+  updateBlock: (block: Block) => void;
+  deleteAll: () => void
 }
 
 export const equals = (block1: Block | undefined, block2: Block | undefined): boolean => {
