@@ -6,6 +6,11 @@ export type Block = {
   resourceQuantity: number;
 }
 
+export type BlockContextType = {
+  blocks: Block[];
+  saveBlock: (block: Block) => void;
+}
+
 export const equals = (block1: Block | undefined, block2: Block | undefined): boolean => {
   if (block1 === undefined || block2 === undefined) return false
 

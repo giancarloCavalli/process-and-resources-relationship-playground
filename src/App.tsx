@@ -1,10 +1,13 @@
+import BlockProvider from "./context/blockContext";
 import { Homepage } from "./pages/Homepage";
 
 function App() {
   return (
-    <div className="App">
-      <Homepage />
-    </div>
+    <BlockProvider>
+      <div className="App">
+        <Homepage />
+      </div>
+    </BlockProvider>
   );
 }
 
