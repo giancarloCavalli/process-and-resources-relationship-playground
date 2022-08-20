@@ -133,7 +133,6 @@ export const Homepage = () => {
           <DraggableBlock
             isWaitingSelection={isBlockWaitingSelection(block, editControl.editingForBlock)}
             isInEditConnectionMode={equals(block, editControl.editingForBlock)}
-            position={block.position}
             block={block}
             key={index}
             onEditButtonClick={handleBlockEditClick}

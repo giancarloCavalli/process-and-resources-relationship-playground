@@ -1,12 +1,10 @@
 import * as S from './styles';
 import React, { useContext, useRef } from 'react';
 import { Block, BlockContextType } from '../../types/block';
-import { Position } from '../../types/position';
 import { BlockContext } from '../../context/blockContext';
 
 type Props = {
   block: Block;
-  position: Position;
   isWaitingSelection: boolean;
   isInEditConnectionMode: boolean;
   onEditButtonClick: (block: Block) => void
@@ -17,7 +15,6 @@ type Props = {
 
 export const DraggableBlock = ({
   block,
-  position,
   isWaitingSelection,
   isInEditConnectionMode,
   onEditButtonClick,
@@ -100,9 +97,11 @@ export const DraggableBlock = ({
     document.onmousemove = null;
   }
 
+  const { id, position } = block
+
   return (
     <S.Wrapper
-      id={block.id}
+      id={id}
       onMouseDown={(event) => dragMouseDown(event)}
       ref={wrapperRef}
       left={`${position.left}px`}
