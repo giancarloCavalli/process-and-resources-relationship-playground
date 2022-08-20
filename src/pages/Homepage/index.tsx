@@ -15,16 +15,12 @@ type BlockControl = {
   type: BlockType;
 }
 
-type EditControl = {
-  editingForBlock: Block | undefined;
-}
-
 export const Homepage = () => {
   // states
   const [blockControl, setBlockControl] = useState<BlockControl[]>(
     Object.keys(BlockTypeEnum).map(v => { return { type: v as BlockType, idCounter: 0 } })
   )
-  const [editControl, setEditControl] = useState<EditControl>({ editingForBlock: undefined })
+  const [editingBlock, setEditingBlock] = useState<Block | undefined>(undefined)
   const [connections, setConnections] = useState<BlockConnection[]>([])
   const [solvingScenario, setSolvingScenario] = useState<DependencySolvingScenario[]>([])
   const [solvingScene, setSolvingScene] = useState<number | undefined>(undefined)
@@ -42,13 +38,13 @@ export const Homepage = () => {
   }
 
   const handleBlockEditClick = (block: Block) => {
-    setEditControl({ editingForBlock: block });
+    setEditingBlock(block);
 
     if (solvingScene !== undefined) clearConnections()
   }
 
   const handleCancelBlockEditClick = () => {
-    setEditControl({ editingForBlock: undefined });
+    setEditingBlock(undefined);
   }
 
   const handleDropConnectionClick = (block: Block) => {
@@ -58,10 +54,10 @@ export const Homepage = () => {
   }
 
   const handleConnectBlockClick = (block: Block) => {
-    const sequence = connections.filter(({ from, to }) => equals(from, editControl.editingForBlock) && equals(to, block)).length;
+    const sequence = connections.filter(({ from, to }) => equals(from, editingBlock) && equals(to, block)).length;
 
-    setConnections([...connections, { from: editControl.editingForBlock as Block, to: block, sequenceItHasBeenAddedConsideringEquals: sequence }])
-    setEditControl({ editingForBlock: undefined })
+    setConnections([...connections, { from: editingBlock as Block, to: block, sequenceItHasBeenAddedConsideringEquals: sequence }])
+    setEditingBlock(undefined)
   }
 
   const addResourceBlock = () => {
@@ -98,7 +94,7 @@ export const Homepage = () => {
   const clearAll = () => {
     deleteAll()
     setBlockControl(Object.keys(BlockTypeEnum).map(v => { return { type: v as BlockType, idCounter: 0 } }))
-    setEditControl({ editingForBlock: undefined })
+    setEditingBlock(undefined)
   }
 
   const clearConnections = () => {
@@ -131,8 +127,8 @@ export const Homepage = () => {
         </S.SceneButtonsWrapper>
         {blocks.map((block, index) => (
           <DraggableBlock
-            isWaitingSelection={isBlockWaitingSelection(block, editControl.editingForBlock)}
-            isInEditConnectionMode={equals(block, editControl.editingForBlock)}
+            isWaitingSelection={isBlockWaitingSelection(block, editingBlock)}
+            isInEditConnectionMode={equals(block, editingBlock)}
             block={block}
             key={index}
             onEditButtonClick={handleBlockEditClick}
