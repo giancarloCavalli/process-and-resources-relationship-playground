@@ -27,7 +27,7 @@ export const Homepage = () => {
 
   const { blocks, saveBlock, deleteAll } = useContext(BlockContext) as BlockContextType
 
-  const deviationBaseNumber = 8;
+  const DEVIATION_BASE_NUMBER = 8;
 
   const getBlockId = (blockType: BlockType): string => {
     let control = blockControl.find(({ type }) => type === blockType);
@@ -144,7 +144,7 @@ export const Homepage = () => {
                 positionFrom: from.position,
                 positionTo: to.position,
                 lineSlackness: 0.2,
-                deviation: deviationBaseNumber * sequenceItHasBeenAddedConsideringEquals
+                deviation: DEVIATION_BASE_NUMBER * sequenceItHasBeenAddedConsideringEquals
               }
             })
             :
@@ -153,7 +153,7 @@ export const Homepage = () => {
                 positionFrom: from.position,
                 positionTo: to.position,
                 lineSlackness: 0.2,
-                deviation: deviationBaseNumber * sequenceItHasBeenAddedConsideringEquals
+                deviation: DEVIATION_BASE_NUMBER * sequenceItHasBeenAddedConsideringEquals
               }
             })
         } />
