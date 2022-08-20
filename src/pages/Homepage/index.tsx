@@ -29,7 +29,7 @@ export const Homepage = () => {
   const [solvingScenario, setSolvingScenario] = useState<DependencySolvingScenario[]>([])
   const [solvingScene, setSolvingScene] = useState<number | undefined>(undefined)
 
-  const { blocks, saveBlock, updateBlock, deleteAll } = useContext(BlockContext) as BlockContextType
+  const { blocks, saveBlock, deleteAll } = useContext(BlockContext) as BlockContextType
 
   const deviationBaseNumber = 8;
 
@@ -62,18 +62,6 @@ export const Homepage = () => {
 
     setConnections([...connections, { from: editControl.editingForBlock as Block, to: block, sequenceItHasBeenAddedConsideringEquals: sequence }])
     setEditControl({ editingForBlock: undefined })
-  }
-
-  const handleIncrementResourceQuantityClick = (block: Block) => {
-    updateBlock(block)
-
-    if (solvingScene !== undefined) clearConnections()
-  }
-
-  const handleDecrementResourceQuantityClick = (block: Block) => {
-    updateBlock(block)
-
-    if (solvingScene !== undefined) clearConnections()
   }
 
   const addResourceBlock = () => {
@@ -152,8 +140,6 @@ export const Homepage = () => {
             onCancelEditButtonClick={handleCancelBlockEditClick}
             onDropConnectionButtonClick={handleDropConnectionClick}
             onConnectButtonClick={handleConnectBlockClick}
-            onIncrementResourceQuantityClick={handleIncrementResourceQuantityClick}
-            onDecrementResourceQuantityClick={handleDecrementResourceQuantityClick}
           />
         ))}
         <ConnectionArrow connections={

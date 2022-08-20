@@ -13,8 +13,6 @@ type Props = {
   onCancelEditButtonClick: () => void
   onDropConnectionButtonClick: (block: Block) => void
   onConnectButtonClick: (block: Block) => void
-  onIncrementResourceQuantityClick: (block: Block) => void
-  onDecrementResourceQuantityClick: (block: Block) => void
 }
 
 export const DraggableBlock = ({
@@ -25,10 +23,13 @@ export const DraggableBlock = ({
   onEditButtonClick,
   onCancelEditButtonClick,
   onDropConnectionButtonClick,
-  onConnectButtonClick,
-  onIncrementResourceQuantityClick,
-  onDecrementResourceQuantityClick
+  onConnectButtonClick
 }: Props) => {
+
+  const limits = {
+    MIN_RESOURCE: 1,
+    MAX_RESOURCE: 4
+  }
 
   const { updateBlock } = useContext(BlockContext) as BlockContextType
 
@@ -49,16 +50,16 @@ export const DraggableBlock = ({
   }
 
   const handleIncrementResourceQuantity = () => {
-    if (block.resourceQuantity < 4) {
-      const resourceQuantity = block.resourceQuantity + 1
-      onIncrementResourceQuantityClick({ ...block, resourceQuantity })
+    if (block.resourceQuantity < limits.MAX_RESOURCE) {
+      block.resourceQuantity++
+      updateBlock(block)
     }
   }
 
   const handleDecrementResourceQuantity = () => {
-    if (block.resourceQuantity > 1) {
-      const resourceQuantity = block.resourceQuantity - 1
-      onDecrementResourceQuantityClick({ ...block, resourceQuantity })
+    if (block.resourceQuantity > limits.MIN_RESOURCE) {
+      block.resourceQuantity--
+      updateBlock(block)
     }
   }
 
