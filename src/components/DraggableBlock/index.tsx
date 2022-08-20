@@ -1,14 +1,14 @@
 import * as S from './styles';
-import React, { useRef } from 'react';
-import { Block } from '../../types/block';
+import React, { useContext, useRef } from 'react';
+import { Block, BlockContextType } from '../../types/block';
 import { Position } from '../../types/position';
+import { BlockContext } from '../../context/blockContext';
 
 type Props = {
   block: Block;
   position: Position;
   isWaitingSelection: boolean;
   isInEditConnectionMode: boolean;
-  onPositionChange: (block: Block, top: number, left: number) => void
   onEditButtonClick: (block: Block) => void
   onCancelEditButtonClick: () => void
   onDropConnectionButtonClick: (block: Block) => void
@@ -22,7 +22,6 @@ export const DraggableBlock = ({
   position,
   isWaitingSelection,
   isInEditConnectionMode,
-  onPositionChange,
   onEditButtonClick,
   onCancelEditButtonClick,
   onDropConnectionButtonClick,
@@ -30,6 +29,8 @@ export const DraggableBlock = ({
   onIncrementResourceQuantityClick,
   onDecrementResourceQuantityClick
 }: Props) => {
+
+  const { updateBlock } = useContext(BlockContext) as BlockContextType
 
   const handleEditButtonClick = () => {
     onEditButtonClick(block)
@@ -86,7 +87,10 @@ export const DraggableBlock = ({
     pos4 = event.clientY;
 
     // set the element's new position:
-    onPositionChange(block, wrapperRef.current ? wrapperRef.current.offsetTop - pos2 : 0, wrapperRef.current ? wrapperRef.current.offsetLeft - pos1 : 0)
+    const top = wrapperRef.current ? wrapperRef.current.offsetTop - pos2 : 0
+    const left = wrapperRef.current ? wrapperRef.current.offsetLeft - pos1 : 0
+    block.position = { top, left }
+    updateBlock(block)
   }
 
   const closeDragElement = () => {

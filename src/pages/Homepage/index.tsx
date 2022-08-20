@@ -90,11 +90,6 @@ export const Homepage = () => {
     saveBlock(block)
   }
 
-  const handlePositionChange = (block: Block, top: number, left: number) => {
-    block.position = { top, left }
-    updateBlock(block)
-  }
-
   const handleCheckDeadlock = () => {
     const scenario: DependencySolvingScenario[] = buildDependenciesSolvingScenario(connections)
     setSolvingScenario(scenario);
@@ -151,7 +146,6 @@ export const Homepage = () => {
             isWaitingSelection={isBlockWaitingSelection(block, editControl.editingForBlock)}
             isInEditConnectionMode={equals(block, editControl.editingForBlock)}
             position={block.position}
-            onPositionChange={handlePositionChange}
             block={block}
             key={index}
             onEditButtonClick={handleBlockEditClick}
