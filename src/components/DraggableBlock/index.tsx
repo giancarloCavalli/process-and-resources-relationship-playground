@@ -7,20 +7,20 @@ type Props = {
   block: Block;
   isWaitingSelection: boolean;
   isInEditConnectionMode: boolean;
-  onEditButtonClick: (block: Block) => void
-  onCancelEditButtonClick: () => void
+  onStartConnectingClick: (block: Block) => void
+  onCancelStartConnectingClick: () => void
   onDropConnectionButtonClick: (block: Block) => void
-  onConnectButtonClick: (block: Block) => void
+  onConnectToClick: (block: Block) => void
 }
 
 export const DraggableBlock = ({
   block,
   isWaitingSelection,
   isInEditConnectionMode,
-  onEditButtonClick,
-  onCancelEditButtonClick,
+  onStartConnectingClick,
+  onCancelStartConnectingClick,
   onDropConnectionButtonClick,
-  onConnectButtonClick
+  onConnectToClick
 }: Props) => {
 
   const limits = {
@@ -30,20 +30,20 @@ export const DraggableBlock = ({
 
   const { updateBlock } = useContext(BlockContext) as BlockContextType
 
-  const handleEditButtonClick = () => {
-    onEditButtonClick(block)
+  const handleStartConnectingClick = () => {
+    onStartConnectingClick(block)
   }
 
-  const handleCancelEditButtonClick = () => {
-    onCancelEditButtonClick()
+  const handleCancelStartConnectingClick = () => {
+    onCancelStartConnectingClick()
   }
 
   const handleDropConnectionButtonClick = () => {
     onDropConnectionButtonClick(block)
   }
 
-  const handleConnectButtonClick = () => {
-    onConnectButtonClick(block)
+  const handleConnectToClick = () => {
+    onConnectToClick(block)
   }
 
   const handleIncrementResourceQuantity = () => {
@@ -128,16 +128,16 @@ export const DraggableBlock = ({
 
       <S.ButtonWrapper>
         {isWaitingSelection &&
-          <S.Button backgroundColor='green' onClick={handleConnectButtonClick}>+</S.Button>
+          <S.Button backgroundColor='green' onClick={handleConnectToClick}>+</S.Button>
         }
 
         {isInEditConnectionMode &&
-          <S.Button backgroundColor='red' onClick={handleCancelEditButtonClick}>X</S.Button>
+          <S.Button backgroundColor='red' onClick={handleCancelStartConnectingClick}>X</S.Button>
         }
 
         {!isWaitingSelection && !isInEditConnectionMode &&
           <>
-            <S.SmallButton backgroundColor='green' onClick={handleEditButtonClick}>+</S.SmallButton>
+            <S.SmallButton backgroundColor='green' onClick={handleStartConnectingClick}>+</S.SmallButton>
             <S.SmallButton backgroundColor='red' onClick={handleDropConnectionButtonClick}>-</S.SmallButton>
           </>
         }

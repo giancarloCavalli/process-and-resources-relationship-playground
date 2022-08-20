@@ -127,14 +127,14 @@ export const Homepage = () => {
         </S.SceneButtonsWrapper>
         {blocks.map((block, index) => (
           <DraggableBlock
+            key={index}
             isWaitingSelection={isBlockWaitingSelection(block, editingBlock)}
             isInEditConnectionMode={equals(block, editingBlock)}
             block={block}
-            key={index}
-            onEditButtonClick={handleBlockEditClick}
-            onCancelEditButtonClick={handleCancelBlockEditClick}
+            onStartConnectingClick={handleBlockEditClick}
+            onCancelStartConnectingClick={handleCancelBlockEditClick}
             onDropConnectionButtonClick={handleDropConnectionClick}
-            onConnectButtonClick={handleConnectBlockClick}
+            onConnectToClick={handleConnectBlockClick}
           />
         ))}
         <ConnectionArrow connections={
