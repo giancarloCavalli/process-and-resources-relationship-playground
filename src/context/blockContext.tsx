@@ -19,6 +19,7 @@ const BlockProvider: FC<Props> = ({ children }: Props) => {
 
       if (equals(blockMap, block)) {
         blockMap.resourceQuantity = block.resourceQuantity
+        blockMap.position = block.position
       }
 
       return blockMap

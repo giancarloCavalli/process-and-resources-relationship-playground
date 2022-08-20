@@ -4,9 +4,8 @@ import { DraggableBlock } from '../../components/DraggableBlock';
 import { BlockTypeEnum } from '../../enum/blockTypeEnum';
 import { Block, BlockContextType, equals } from '../../types/block';
 import { BlockType } from '../../types/blockType';
-import { buildDependenciesSolvingScenario, getPosition, isBlockWaitingSelection } from './helpers';
+import { buildDependenciesSolvingScenario, isBlockWaitingSelection } from './helpers';
 import { ConnectionArrow } from '../../components/ConnectionArrow';
-import { BlockPosition } from '../../types/blockPosition';
 import { Button } from '../../components/Button';
 import { BlockConnection, DependencySolvingScenario } from './types';
 import { BlockContext } from '../../context/blockContext';
@@ -22,8 +21,6 @@ type EditControl = {
 
 export const Homepage = () => {
   // states
-  const [blocksPosition, setBlocksPosition] = useState<BlockPosition[]>([])
-  // const [blocks, setBlocks] = useState<Block[]>([])
   const [blockControl, setBlockControl] = useState<BlockControl[]>(
     Object.keys(BlockTypeEnum).map(v => { return { type: v as BlockType, idCounter: 0 } })
   )
@@ -88,20 +85,14 @@ export const Homepage = () => {
   }
 
   const addBlock = (blockType: BlockType) => {
-    const block: Block = { id: getBlockId(blockType), type: blockType, resourceQuantity: 1 };
+    const block: Block = { id: getBlockId(blockType), type: blockType, resourceQuantity: 1, position: { top: 50, left: 10 } };
 
     saveBlock(block)
-
-    setBlocksPosition([...blocksPosition, { block, position: { top: 50, left: 10 } }])
   }
 
   const handlePositionChange = (block: Block, top: number, left: number) => {
-    setBlocksPosition(blocksPosition.map(blockPosition => {
-      if ((blockPosition.block.id === block.id) && (blockPosition.block.type === block.type)) {
-        return { block, position: { top, left } };
-      }
-      return blockPosition;
-    }))
+    block.position = { top, left }
+    updateBlock(block)
   }
 
   const handleCheckDeadlock = () => {
@@ -122,7 +113,6 @@ export const Homepage = () => {
   }
 
   const clearAll = () => {
-    setBlocksPosition([])
     deleteAll()
     setBlockControl(Object.keys(BlockTypeEnum).map(v => { return { type: v as BlockType, idCounter: 0 } }))
     setEditControl({ editingForBlock: undefined })
@@ -160,7 +150,7 @@ export const Homepage = () => {
           <DraggableBlock
             isWaitingSelection={isBlockWaitingSelection(block, editControl.editingForBlock)}
             isInEditConnectionMode={equals(block, editControl.editingForBlock)}
-            position={getPosition(block, blocksPosition)}
+            position={block.position}
             onPositionChange={handlePositionChange}
             block={block}
             key={index}
@@ -176,8 +166,8 @@ export const Homepage = () => {
           solvingScene === undefined ?
             connections.map(({ from, to, sequenceItHasBeenAddedConsideringEquals }) => {
               return {
-                positionFrom: getPosition(from, blocksPosition),
-                positionTo: getPosition(to, blocksPosition),
+                positionFrom: from.position,
+                positionTo: to.position,
                 lineSlackness: 0.2,
                 deviation: deviationBaseNumber * sequenceItHasBeenAddedConsideringEquals
               }
@@ -185,8 +175,8 @@ export const Homepage = () => {
             :
             solvingScenario[solvingScene].blockConnections.map(({ from, to, sequenceItHasBeenAddedConsideringEquals }) => {
               return {
-                positionFrom: getPosition(from, blocksPosition),
-                positionTo: getPosition(to, blocksPosition),
+                positionFrom: from.position,
+                positionTo: to.position,
                 lineSlackness: 0.2,
                 deviation: deviationBaseNumber * sequenceItHasBeenAddedConsideringEquals
               }

@@ -1,9 +1,11 @@
 import { BlockType } from "./blockType";
+import { Position } from "./position";
 
 export type Block = {
   id: string;
   type: BlockType;
   resourceQuantity: number;
+  position: Position;
 }
 
 export type BlockContextType = {
