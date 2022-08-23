@@ -1,7 +1,7 @@
 import { Wrapper } from "./styles"
-import { Connection } from "../../types/connection"
 import { getCurvedArrowPath } from "./helpers"
 import React from "react"
+import { Connection } from "../types"
 
 type Props = {
   connections: Connection[]

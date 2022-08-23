@@ -1,14 +1,14 @@
 import * as S from './styles';
 import React, { useContext, useRef } from 'react';
-import { Block, BlockContextType } from '../../types/block';
-import { BlockContext } from '../../context/blockContext';
+import { BlockContext } from '../context';
+import { Block } from './types';
+import { BlockContextType } from '../types';
 
 type Props = {
   block: Block;
   isWaitingSelection: boolean;
   isInEditConnectionMode: boolean;
-  onStartConnectingClick: (block: Block) => void
-  onCancelStartConnectingClick: () => void
+  onStartConnectingClick: () => void
   onDropConnectionButtonClick: (block: Block) => void
   onConnectToClick: (block: Block) => void
 }
@@ -18,24 +18,27 @@ export const DraggableBlock = ({
   isWaitingSelection,
   isInEditConnectionMode,
   onStartConnectingClick,
-  onCancelStartConnectingClick,
   onDropConnectionButtonClick,
   onConnectToClick
 }: Props) => {
+
+  //TODO
+  // use connections from context to handle connections
 
   const limits = {
     MIN_RESOURCE: 1,
     MAX_RESOURCE: 4
   }
 
-  const { updateBlock } = useContext(BlockContext) as BlockContextType
+  const { updateBlock, updateEditingBlock } = useContext(BlockContext) as BlockContextType
 
   const handleStartConnectingClick = () => {
-    onStartConnectingClick(block)
+    updateEditingBlock(block)
+    onStartConnectingClick()
   }
 
   const handleCancelStartConnectingClick = () => {
-    onCancelStartConnectingClick()
+    updateEditingBlock(undefined)
   }
 
   const handleDropConnectionButtonClick = () => {
@@ -44,6 +47,7 @@ export const DraggableBlock = ({
 
   const handleConnectToClick = () => {
     onConnectToClick(block)
+    updateEditingBlock(undefined)
   }
 
   const handleIncrementResourceQuantity = () => {

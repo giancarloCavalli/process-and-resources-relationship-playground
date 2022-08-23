@@ -1,4 +1,4 @@
-import { Position } from "../../types/position";
+import { Position } from "../../../types/position";
 
 export const getCurvedArrowPath = (fromPosition: Position, toPosition: Position, slackness: number, deviation: number): string => {  
   //https://www.beyondjava.net/how-to-connect-html-elements-with-an-arrow-using-svg

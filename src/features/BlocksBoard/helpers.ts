@@ -1,4 +1,4 @@
-import { Block, equals } from "../../types/block";
+import { Block } from "./DraggableBlock/types";
 import { BlockConnection, DependencySolvingScenario } from "./types";
 
 type ProcessNeedList = {
@@ -9,6 +9,14 @@ type ProcessNeedList = {
 type ResourceDispositionList = {
   block: Block,
   isAvailableTo: Block[],
+}
+
+export const equals = (block1: Block | undefined, block2: Block | undefined): boolean => {
+  if (block1 === undefined || block2 === undefined) return false
+
+  if (block1.id === block2.id && block1.type === block2.type) return true
+
+  return false
 }
 
 const processNeedLists: ProcessNeedList[] = [];

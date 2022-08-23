@@ -1,5 +1,5 @@
-import BlockProvider from "./context/blockContext";
-import { Homepage } from "./pages/Homepage";
+import BlockProvider from "./features/BlocksBoard/context";
+import Homepage from "./pages/Homepage";
 
 function App() {
   return (

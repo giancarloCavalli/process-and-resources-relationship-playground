@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { BlockType } from "../../types/blockType";
+import { BlockType } from "./types";
 
 type Props = {
   left: string;
