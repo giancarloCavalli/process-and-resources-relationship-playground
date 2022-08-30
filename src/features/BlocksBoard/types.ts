@@ -10,6 +10,11 @@ export type BlockContextType = {
   updateEditingBlock: (block: Block | undefined) => void;
   connections: BlockConnection[];
   updateConnections: (connections: BlockConnection[]) => BlockConnection[];
+  clearConnections: () => void;
+  solvingScenarios: DependencySolvingScenario[];
+  updateSolvingScenarios: (solvingScenearios: DependencySolvingScenario[]) => DependencySolvingScenario[];
+  solvingScene: number | undefined;
+  updateSolvingScene: (solvingScene: number | undefined) => void; 
 }
 
 export type BlockConnection = {

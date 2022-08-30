@@ -15,14 +15,16 @@ type BlockControl = {
 }
 
 export const BlocksBoard = () => {
-  // states
   const [blockControl, setBlockControl] = useState<BlockControl[]>(
     Object.keys(BlockTypeEnum).map(v => { return { type: v as BlockType, idCounter: 0 } })
   )
-  const [solvingScenario, setSolvingScenario] = useState<DependencySolvingScenario[]>([])
-  const [solvingScene, setSolvingScene] = useState<number | undefined>(undefined)
 
-  const { blocks, saveBlock, deleteAll, editingBlock, connections, updateConnections } = useContext(BlockContext) as BlockContextType
+  const {
+    blocks, saveBlock, deleteAll, editingBlock,
+    connections, updateConnections,
+    solvingScenarios, updateSolvingScenarios,
+    solvingScene, updateSolvingScene
+  } = useContext(BlockContext) as BlockContextType
 
   const DEVIATION_BASE_NUMBER = 8;
 
@@ -32,16 +34,6 @@ export const BlocksBoard = () => {
     let id = control ? control.idCounter.toString() : "0";
     setBlockControl(blockControl.map(value => { return value.type === blockType ? { ...value, idCounter: value.idCounter + 1 } : value }));
     return id;
-  }
-
-  const handleBlockEditClick = () => {
-    if (solvingScene !== undefined) clearConnections()
-  }
-
-  const handleDropConnectionClick = (block: Block) => {
-    updateConnections(connections.filter(connection => !equals(connection.from, block)))
-
-    if (solvingScene !== undefined) clearConnections()
   }
 
   const addResourceBlock = () => {
@@ -60,14 +52,14 @@ export const BlocksBoard = () => {
 
   const handleCheckDeadlock = () => {
     const scenario: DependencySolvingScenario[] = buildDependenciesSolvingScenario(connections)
-    setSolvingScenario(scenario);
+    updateSolvingScenarios(scenario);
 
     if (scenario.length === 0) window.alert("The system will generate a deadlock error!")
-    else setSolvingScene(0);
+    else updateSolvingScene(0);
   }
 
   const handleSelectScene = (sceneNumber: number) => {
-    setSolvingScene(sceneNumber)
+    updateSolvingScene(sceneNumber)
   }
 
   const handleDeleteAll = () => {
@@ -82,8 +74,8 @@ export const BlocksBoard = () => {
 
   const clearConnections = () => {
     updateConnections([])
-    setSolvingScene(undefined)
-    setSolvingScenario([])
+    updateSolvingScene(undefined)
+    updateSolvingScenarios([])
   }
 
   return (
@@ -97,7 +89,7 @@ export const BlocksBoard = () => {
       <main>
         <S.SceneButtonsWrapper>
           {solvingScene !== undefined && <span style={{ marginLeft: "10px" }}>See each of the solution steps here 👉</span>}
-          {solvingScenario.map(({ sequence }) => (
+          {solvingScenarios.map(({ sequence }) => (
             <S.SceneButton
               key={sequence}
               selected={solvingScene === sequence}
@@ -114,8 +106,6 @@ export const BlocksBoard = () => {
             isWaitingSelection={isBlockWaitingSelection(block, editingBlock)}
             isInEditConnectionMode={equals(block, editingBlock)}
             block={block}
-            onStartConnectingClick={handleBlockEditClick}
-            onDropConnectionButtonClick={handleDropConnectionClick}
           />
         ))}
         <ConnectionArrow connections={
@@ -129,7 +119,7 @@ export const BlocksBoard = () => {
               }
             })
             :
-            solvingScenario[solvingScene].blockConnections.map(({ from, to, sequenceItHasBeenAddedConsideringEquals }) => {
+            solvingScenarios[solvingScene].blockConnections.map(({ from, to, sequenceItHasBeenAddedConsideringEquals }) => {
               return {
                 positionFrom: from.position,
                 positionTo: to.position,

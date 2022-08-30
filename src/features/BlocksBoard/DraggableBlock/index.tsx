@@ -9,31 +9,27 @@ type Props = {
   block: Block;
   isWaitingSelection: boolean;
   isInEditConnectionMode: boolean;
-  onStartConnectingClick: () => void
-  onDropConnectionButtonClick: (block: Block) => void
 }
 
 export const DraggableBlock = ({
   block,
   isWaitingSelection,
   isInEditConnectionMode,
-  onStartConnectingClick,
-  onDropConnectionButtonClick,
 }: Props) => {
-
-  //TODO
-  // use connections from context to handle connections
 
   const limits = {
     MIN_RESOURCE: 1,
     MAX_RESOURCE: 4
   }
 
-  const { updateBlock, updateEditingBlock, connections, updateConnections, editingBlock } = useContext(BlockContext) as BlockContextType
+  const {
+    updateBlock, updateEditingBlock, connections, updateConnections, clearConnections, editingBlock,
+    solvingScene
+  } = useContext(BlockContext) as BlockContextType
 
   const handleStartConnectingClick = () => {
     updateEditingBlock(block)
-    onStartConnectingClick()
+    if (solvingScene !== undefined) clearConnections()
   }
 
   const handleCancelStartConnectingClick = () => {
@@ -41,7 +37,8 @@ export const DraggableBlock = ({
   }
 
   const handleDropConnectionButtonClick = () => {
-    onDropConnectionButtonClick(block)
+    updateConnections(connections.filter(connection => !equals(connection.from, block)))
+    if (solvingScene !== undefined) clearConnections()
   }
 
   const handleConnectToClick = () => {

@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useState } from "react";
 import { Block } from "./DraggableBlock/types";
 import { equals } from "./helpers";
-import { BlockConnection, BlockContextType } from "./types";
+import { BlockConnection, BlockContextType, DependencySolvingScenario } from "./types";
 
 type Props = {
   children: ReactNode
@@ -13,6 +13,8 @@ const BlockProvider: React.FC<Props> = ({ children }: Props) => {
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [editingBlock, setEditingBlock] = useState<Block | undefined>(undefined);
   const [connections, setConnections] = useState<BlockConnection[]>([]);
+  const [solvingScenarios, setSolvingScenarios] = useState<DependencySolvingScenario[]>([])
+  const [solvingScene, setSolvingScene] = useState<number | undefined>(undefined)
 
   function saveBlock(block: Block) {
     setBlocks([...blocks, block])
@@ -41,13 +43,30 @@ const BlockProvider: React.FC<Props> = ({ children }: Props) => {
 
   function updateConnections(blockConnections: BlockConnection[]): BlockConnection[] {
     setConnections(blockConnections)
-    return connections;
+    return connections
+  }
+
+  function updateSolvingScenarios(dependencySolvingScenearios: DependencySolvingScenario[]): DependencySolvingScenario[] {
+    setSolvingScenarios(dependencySolvingScenearios)
+    return solvingScenarios
+  }
+
+  function updateSolvingScene(solvingScene: number | undefined = undefined) {
+    setSolvingScene(solvingScene)
+  }
+
+  function clearConnections() {
+    updateConnections([])
+    updateSolvingScene()
+    updateSolvingScenarios([])
   }
 
   return (
     <BlockContext.Provider value={{
       blocks, editingBlock, saveBlock, updateBlock, deleteAll, updateEditingBlock,
-      connections, updateConnections
+      connections, updateConnections, clearConnections,
+      solvingScenarios, updateSolvingScenarios,
+      solvingScene, updateSolvingScene
     }}>
       {children}
     </BlockContext.Provider>
