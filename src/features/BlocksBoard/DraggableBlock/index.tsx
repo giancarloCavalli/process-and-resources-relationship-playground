@@ -3,6 +3,7 @@ import React, { useContext, useRef } from 'react';
 import { BlockContext } from '../context';
 import { Block } from './types';
 import { BlockContextType } from '../types';
+import { equals } from '../helpers';
 
 type Props = {
   block: Block;
@@ -10,7 +11,6 @@ type Props = {
   isInEditConnectionMode: boolean;
   onStartConnectingClick: () => void
   onDropConnectionButtonClick: (block: Block) => void
-  onConnectToClick: (block: Block) => void
 }
 
 export const DraggableBlock = ({
@@ -19,7 +19,6 @@ export const DraggableBlock = ({
   isInEditConnectionMode,
   onStartConnectingClick,
   onDropConnectionButtonClick,
-  onConnectToClick
 }: Props) => {
 
   //TODO
@@ -30,7 +29,7 @@ export const DraggableBlock = ({
     MAX_RESOURCE: 4
   }
 
-  const { updateBlock, updateEditingBlock } = useContext(BlockContext) as BlockContextType
+  const { updateBlock, updateEditingBlock, connections, updateConnections, editingBlock } = useContext(BlockContext) as BlockContextType
 
   const handleStartConnectingClick = () => {
     updateEditingBlock(block)
@@ -46,7 +45,9 @@ export const DraggableBlock = ({
   }
 
   const handleConnectToClick = () => {
-    onConnectToClick(block)
+    const sequence = connections.filter(({ from, to }) => equals(from, editingBlock) && equals(to, block)).length;
+
+    updateConnections([...connections, { from: editingBlock as Block, to: block, sequenceItHasBeenAddedConsideringEquals: sequence }])
     updateEditingBlock(undefined)
   }
 

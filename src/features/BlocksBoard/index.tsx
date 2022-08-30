@@ -4,7 +4,7 @@ import { DraggableBlock } from './DraggableBlock';
 import { buildDependenciesSolvingScenario, equals, isBlockWaitingSelection } from './helpers';
 import { ConnectionArrow } from './ConnectionArrow';
 import { Button } from '../../components/Button';
-import { BlockConnection, BlockContextType, DependencySolvingScenario } from './types';
+import { BlockContextType, DependencySolvingScenario } from './types';
 import { BlockContext } from './context';
 import { Block, BlockType } from './DraggableBlock/types';
 import { BlockTypeEnum } from './DraggableBlock/enum';
@@ -19,11 +19,10 @@ export const BlocksBoard = () => {
   const [blockControl, setBlockControl] = useState<BlockControl[]>(
     Object.keys(BlockTypeEnum).map(v => { return { type: v as BlockType, idCounter: 0 } })
   )
-  const [connections, setConnections] = useState<BlockConnection[]>([])
   const [solvingScenario, setSolvingScenario] = useState<DependencySolvingScenario[]>([])
   const [solvingScene, setSolvingScene] = useState<number | undefined>(undefined)
 
-  const { blocks, saveBlock, deleteAll, editingBlock } = useContext(BlockContext) as BlockContextType
+  const { blocks, saveBlock, deleteAll, editingBlock, connections, updateConnections } = useContext(BlockContext) as BlockContextType
 
   const DEVIATION_BASE_NUMBER = 8;
 
@@ -40,15 +39,9 @@ export const BlocksBoard = () => {
   }
 
   const handleDropConnectionClick = (block: Block) => {
-    setConnections(connections.filter(connection => !equals(connection.from, block)))
+    updateConnections(connections.filter(connection => !equals(connection.from, block)))
 
     if (solvingScene !== undefined) clearConnections()
-  }
-
-  const handleConnectBlockClick = (block: Block) => {
-    const sequence = connections.filter(({ from, to }) => equals(from, editingBlock) && equals(to, block)).length;
-
-    setConnections([...connections, { from: editingBlock as Block, to: block, sequenceItHasBeenAddedConsideringEquals: sequence }])
   }
 
   const addResourceBlock = () => {
@@ -88,7 +81,7 @@ export const BlocksBoard = () => {
   }
 
   const clearConnections = () => {
-    setConnections([])
+    updateConnections([])
     setSolvingScene(undefined)
     setSolvingScenario([])
   }
@@ -123,7 +116,6 @@ export const BlocksBoard = () => {
             block={block}
             onStartConnectingClick={handleBlockEditClick}
             onDropConnectionButtonClick={handleDropConnectionClick}
-            onConnectToClick={handleConnectBlockClick}
           />
         ))}
         <ConnectionArrow connections={
