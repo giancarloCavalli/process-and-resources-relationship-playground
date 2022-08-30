@@ -114,8 +114,8 @@ export const DraggableBlock = ({
         block.type === 'RESOURCE' &&
         <ResourceButtonsAndCounter
           resourceQuantity={block.resourceQuantity}
-          handleIncrementResourceQuantity={handleIncrementResourceQuantity}
-          handleDecrementResourceQuantity={handleDecrementResourceQuantity}
+          onIncrementResourceQuantity={handleIncrementResourceQuantity}
+          onDecrementResourceQuantity={handleDecrementResourceQuantity}
         />
       }
 
