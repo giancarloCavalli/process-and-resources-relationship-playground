@@ -4,6 +4,7 @@ import { BlockContext } from '../context';
 import { Block } from './types';
 import { BlockContextType } from '../types';
 import { equals } from '../helpers';
+import { ResourceButtonsAndCounter } from './ResourceButtonsAndCounter';
 
 type Props = {
   block: Block;
@@ -109,19 +110,13 @@ export const DraggableBlock = ({
       left={`${position.left}px`}
       top={`${position.top}px`}
     >
-      {block.type === 'RESOURCE'
-        &&
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <S.ResourceCounterWrapper>
-            {[...Array(block.resourceQuantity)].map((e, index) => (
-              <S.ResourceSphere key={index} />
-            ))}
-          </S.ResourceCounterWrapper>
-          <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-            <S.SmallButton backgroundColor='orange' onClick={handleIncrementResourceQuantity}>+</S.SmallButton>
-            <S.SmallButton backgroundColor='purple' onClick={handleDecrementResourceQuantity}>-</S.SmallButton>
-          </div>
-        </div>
+      {
+        block.type === 'RESOURCE' &&
+        <ResourceButtonsAndCounter
+          resourceQuantity={block.resourceQuantity}
+          handleIncrementResourceQuantity={handleIncrementResourceQuantity}
+          handleDecrementResourceQuantity={handleDecrementResourceQuantity}
+        />
       }
 
       <S.Block type={block.type}>
