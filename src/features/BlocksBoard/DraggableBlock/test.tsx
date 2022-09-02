@@ -1,5 +1,5 @@
+import { fireEvent, render } from "@/utils/test-utils"
 import { DraggableBlock } from "."
-import { fireEvent, render } from "../../../utils/test-utils"
 import { Block } from "./types"
 
 describe('DraggableBlock tests', () => {
