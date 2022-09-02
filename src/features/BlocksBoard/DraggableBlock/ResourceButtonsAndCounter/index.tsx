@@ -16,8 +16,8 @@ export const ResourceButtonsAndCounter = ({ resourceQuantity, onIncrementResourc
         ))}
       </S.ResourceCounterWrapper>
       <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-        <S2.SmallButton backgroundColor='orange' onClick={onIncrementResourceQuantity}>+</S2.SmallButton>
-        <S2.SmallButton backgroundColor='purple' onClick={onDecrementResourceQuantity}>-</S2.SmallButton>
+        <S2.SmallButton backgroundColor='orange' onClick={onIncrementResourceQuantity} data-testid='incrementResourceButton'>+</S2.SmallButton>
+        <S2.SmallButton backgroundColor='purple' onClick={onDecrementResourceQuantity} data-testid='decrementResourceButton'>-</S2.SmallButton>
       </div>
     </div>
   )
