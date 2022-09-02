@@ -3,7 +3,7 @@ import { ResourceButtonsAndCounter } from "."
 
 describe('ResourceButtonsAndCounter tests', () => {
 
-  it('should render two small buttons and 3 resource spheres', () => {
+  it('should render two small buttons and number of resource spheres equal to resource quantity prop', () => {
     const { getAllByRole, getAllByTestId } = render(
       <ResourceButtonsAndCounter
         resourceQuantity={3}
