@@ -106,4 +106,53 @@ describe('DraggableBlock tests', () => {
     expect(getAllByTestId('resource-sphere').length).toBe(1)
   })
 
+  it('should render cancel connecting button when isInEditConnectionMode and hide + and - small buttons', () => {
+    const block: Block = {
+      id: '1',
+      position: {
+        left: 50,
+        top: 100
+      },
+      type: "RESOURCE",
+      resourceQuantity: 2
+    }
+
+    const { getByText, queryByTestId } = render(
+      <DraggableBlock
+        block={block}
+        isInEditConnectionMode
+        isWaitingSelection={false}
+      />
+    )
+
+    expect(getByText('X')).toBeInTheDocument()
+
+    expect(queryByTestId('start-connecting-button')).not.toBeInTheDocument()
+    expect(queryByTestId('drop-connections-button')).not.toBeInTheDocument()
+  })
+
+  it('should render connect button when isWaitingSelection and hide + and - small buttons', () => {
+    const block: Block = {
+      id: '1',
+      position: {
+        left: 50,
+        top: 100
+      },
+      type: "PROCESS",
+      resourceQuantity: 1
+    }
+
+    const { queryByTestId } = render(
+      <DraggableBlock
+        block={block}
+        isInEditConnectionMode={false}
+        isWaitingSelection
+      />
+    )
+
+    expect(queryByTestId('connect-to-button')).toBeInTheDocument()
+
+    expect(queryByTestId('start-connecting-button')).not.toBeInTheDocument()
+    expect(queryByTestId('drop-connections-button')).not.toBeInTheDocument()
+  })
 })

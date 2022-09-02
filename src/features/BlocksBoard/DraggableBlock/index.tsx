@@ -125,7 +125,7 @@ export const DraggableBlock = ({
 
       <S.ButtonWrapper>
         {isWaitingSelection &&
-          <S.Button backgroundColor='green' onClick={handleConnectToClick}>+</S.Button>
+          <S.Button backgroundColor='green' onClick={handleConnectToClick} data-testid='connect-to-button'>+</S.Button>
         }
 
         {isInEditConnectionMode &&
@@ -134,8 +134,8 @@ export const DraggableBlock = ({
 
         {!isWaitingSelection && !isInEditConnectionMode &&
           <>
-            <S.SmallButton backgroundColor='green' onClick={handleStartConnectingClick}>+</S.SmallButton>
-            <S.SmallButton backgroundColor='red' onClick={handleDropConnectionButtonClick}>-</S.SmallButton>
+            <S.SmallButton backgroundColor='green' onClick={handleStartConnectingClick} data-testid='start-connecting-button'>+</S.SmallButton>
+            <S.SmallButton backgroundColor='red' onClick={handleDropConnectionButtonClick} data-testid='drop-connections-button'>-</S.SmallButton>
           </>
         }
       </S.ButtonWrapper>
