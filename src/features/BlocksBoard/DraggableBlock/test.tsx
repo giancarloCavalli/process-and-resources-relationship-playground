@@ -25,20 +25,24 @@ describe('DraggableBlock tests', () => {
 
     expect(getByText('P99')).toBeInTheDocument()
     expect(queryByTestId('resource-sphere')).not.toBeInTheDocument()
+    expect(queryByTestId('block-wrapper')).toHaveStyle({
+      left: '50px',
+      top: '100px'
+    })
   })
 
   it('should render resource block passed as prop', () => {
     const block: Block = {
       id: '51',
       position: {
-        left: 50,
-        top: 100
+        left: 100,
+        top: 150
       },
       type: "RESOURCE",
       resourceQuantity: 2
     }
 
-    const { getByText, getAllByTestId } = render(
+    const { getByText, getAllByTestId, queryByTestId } = render(
       <DraggableBlock
         block={block}
         isWaitingSelection={false}
@@ -48,6 +52,10 @@ describe('DraggableBlock tests', () => {
 
     expect(getByText('R51')).toBeInTheDocument()
     expect(getAllByTestId('resource-sphere').length).toBe(2)
+    expect(queryByTestId('block-wrapper')).toHaveStyle({
+      left: '100px',
+      top: '150px'
+    })
   })
 
   it('should increment resource spheres on resource + button click if less than 4 spheres', () => {

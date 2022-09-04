@@ -109,6 +109,7 @@ export const DraggableBlock = ({
       ref={wrapperRef}
       left={`${position.left}px`}
       top={`${position.top}px`}
+      data-testid='block-wrapper'
     >
       {
         block.type === 'RESOURCE' &&
