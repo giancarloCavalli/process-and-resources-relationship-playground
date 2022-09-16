@@ -163,4 +163,37 @@ describe('DraggableBlock tests', () => {
     expect(queryByTestId('start-connecting-button')).not.toBeInTheDocument()
     expect(queryByTestId('drop-connections-button')).not.toBeInTheDocument()
   })
+
+  it('should update position on element drag', () => {
+    const block: Block = {
+      id: '1',
+      position: {
+        left: 0,
+        top: 0
+      },
+      type: "PROCESS",
+      resourceQuantity: 1
+    }
+
+    const { getByTestId } = render(
+      <DraggableBlock
+        block={block}
+        isInEditConnectionMode={false}
+        isWaitingSelection={false}
+      />
+    )
+    //TODO test ondrag events
+    fireEvent.mouseDown(getByTestId(/block-wrapper/), {
+      clientX: 0, clientY: 0
+    })
+    fireEvent.mouseMove(getByTestId(/block-wrapper/), {
+      clientX: 50, clientY: 100
+    })
+    fireEvent.mouseUp(getByTestId(/block-wrapper/))
+
+    expect(getByTestId(/block-wrapper/)).toHaveStyle({
+      left: '50px',
+      top: '100px'
+    })
+  })
 })
