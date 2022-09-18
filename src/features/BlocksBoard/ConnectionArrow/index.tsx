@@ -13,7 +13,7 @@ export const ConnectionArrow = ({ connections }: Props) => {
     <Wrapper>
       {connections.map(({ positionFrom, positionTo, lineSlackness, deviation }, index) => (
         <React.Fragment key={index}>
-          <defs>
+          <defs data-testid='connection-arrow-head'>
             <marker id="triangle" viewBox="0 0 10 10" refX="0" refY="5"
               markerUnits="strokeWidth" markerWidth="17.5"
               markerHeight="14" orient="auto"
@@ -29,6 +29,7 @@ export const ConnectionArrow = ({ connections }: Props) => {
             stroke="red"
             markerEnd="url(#triangle)"
             style={{ zIndex: -1 }}
+            data-testid='connection-line'
           >
 
           </path>
