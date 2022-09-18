@@ -182,7 +182,7 @@ describe('DraggableBlock tests', () => {
         isWaitingSelection={false}
       />
     )
-    //TODO test ondrag events
+
     fireEvent.mouseDown(getByTestId(/block-wrapper/), {
       clientX: 0, clientY: 0
     })
@@ -195,5 +195,9 @@ describe('DraggableBlock tests', () => {
       left: '50px',
       top: '100px'
     })
+
+    expect(block.position.left).toEqual(50)
+    expect(block.position.top).toEqual(100)
   })
+
 })
