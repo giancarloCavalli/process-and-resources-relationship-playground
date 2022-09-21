@@ -1,6 +1,4 @@
-import { Block, equals } from "../../types/block";
-import { BlockPosition } from "../../types/blockPosition";
-import { Position } from "../../types/position";
+import { Block } from "./DraggableBlock/types";
 import { BlockConnection, DependencySolvingScenario } from "./types";
 
 type ProcessNeedList = {
@@ -11,6 +9,14 @@ type ProcessNeedList = {
 type ResourceDispositionList = {
   block: Block,
   isAvailableTo: Block[],
+}
+
+export const equals = (block1: Block | undefined, block2: Block | undefined): boolean => {
+  if (block1 === undefined || block2 === undefined) return false
+
+  if (block1.id === block2.id && block1.type === block2.type) return true
+
+  return false
 }
 
 const processNeedLists: ProcessNeedList[] = [];
@@ -24,16 +30,6 @@ export const isBlockWaitingSelection = (block: Block, blockInEdition: Block | un
   if (blockInEdition.type === block.type) return false
 
   return true
-}
-
-export const getPosition = (block: Block, blocksPosition: BlockPosition[]): Position => {
-  const blockPosition = blocksPosition.find(blockPos => (blockPos.block.id === block.id) && (blockPos.block.type === block.type));
-
-  if (blockPosition != null) {
-    return blockPosition.position;
-  }
-
-  return { top: 50, left: 10 };
 }
 
 export const buildDependenciesSolvingScenario = (connections: BlockConnection[]): DependencySolvingScenario[] => {

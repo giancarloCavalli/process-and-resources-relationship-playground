@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { BlockType } from "../../types/blockType";
+import { BlockType } from "./types";
 
 type Props = {
   left: string;
@@ -43,19 +43,6 @@ export const Block = styled.div<BlockProps>`
   :hover {
     cursor: grab;
   }
-`
-
-export const ResourceCounterWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-`
-
-export const ResourceSphere = styled.div`
-  width: 12px;
-  height: 12px;
-  background-color: grey;
-  border-radius: 50px;
-  border-style: none;
 `
 
 export const ButtonWrapper = styled.div`
